@@ -212,9 +212,9 @@ Evaluation is performed on aligned trade data from Coinbase, Kraken, and Bitstam
 | Fixed        | 4823.86             | 4532.97                      | 3914.27   |
 | Random       | 5141.93             | 5000.64                      | 3775.45   |
 
-![Cumulative Regret: Fixed Context (Real Data)](docs/experiments/real_data_files/figure-html/cell-16-output-2.png)
+![Cumulative Regret: Fixed Context (Real Data)](experiments/real_data_files/figure-html/cell-16-output-2.png)
 
-![Cumulative Regret: Random Context (Real Data)](docs/experiments/real_data_files/figure-html/cell-16-output-4.png)
+![Cumulative Regret: Random Context (Real Data)](experiments/real_data_files/figure-html/cell-16-output-4.png)
  
  *Table 3: Cumulative regret on real cryptocurrency data (200 seeds).*
  
