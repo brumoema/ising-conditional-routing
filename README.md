@@ -176,5 +176,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- [Extropic AI](https://www.extropic.ai/) for developing THRML
+- [Extropic](https://www.extropic.ai/) for developing THRML
 - The JAX team at Google for the high-performance computing framework
