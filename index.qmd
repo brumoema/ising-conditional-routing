@@ -164,7 +164,7 @@ The synthetic experiments serve as a theoretical validation to confirm that the 
 
 *Table 1: Mean cumulative regret in Fixed Context mode (N=3, K=1) after 10,000 steps. Zero regret in IID/Fixed signals that the optimal venue was always the context venue, resulting in a competitively forced zero-regret outcome for all agents.*
 
-![Cumulative regret in Fixed Context mode. From left to right: IID, Correlated, and Regime Shift scenarios.](docs/experiments/synthetic_data_files/figure-html/cell-17-output-2.png)
+![Cumulative regret in Fixed Context mode. From left to right: IID, Correlated, and Regime Shift scenarios.](experiments/synthetic_data_files/figure-html/cell-17-output-2.png)
 
 
 **Results – Random Context Mode (K=1):**
@@ -177,7 +177,7 @@ The synthetic experiments serve as a theoretical validation to confirm that the 
 
 *Table 2: Mean cumulative regret in Random Context mode (N=3, K=1) after 10,000 steps.*
 
-![Cumulative regret in Random Context mode. From left to right: IID, Correlated, and Regime Shift scenarios.](docs/experiments/synthetic_data_files/figure-html/cell-18-output-2.png)
+![Cumulative regret in Random Context mode. From left to right: IID, Correlated, and Regime Shift scenarios.](experiments/synthetic_data_files/figure-html/cell-18-output-2.png)
 
 
 **Summary of Synthetic Findings:**
