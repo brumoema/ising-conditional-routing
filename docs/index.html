@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Bruna Moema">
+<meta name="dcterms.date" content="2026-02-06">
+
+<title>Conditional Inference for Financial Order Routing Using Energy-Based Models – Conditional Inference: THRML &amp; Order Routing</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-a35d343c8bdbcb87d3b82ed68e48a46c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
+      Conditional Inference: THRML &amp; Order Routing
+      </li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title"><a href="./index.html">Conditional Inference for Financial Order Routing Using Energy-Based Models</a></h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Bruna Moema </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 6, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Conditional Inference: THRML &amp; Order Routing</a> 
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Article</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html#overview" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html#introduction" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html#background" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Literature Review</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html#formulation" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Problem Formulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html#methodology" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Methodology</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html#experiments" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Results</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html#conclusion" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Conclusion</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html#references" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Experiments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./experiments/synthetic_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SYNTHETIC DATA<br>EXPERIMENT</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./experiments/real_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">REAL DATA<br>EXPERIMENT</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="overview" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="overview"><span class="header-section-number">1</span> Overview</h2>
+<p>In multi-venue financial markets, traders must decide where to route orders without full visibility into execution quality across all venues. Traditional multi-armed bandit approaches treat venues as independent, missing valuable cross-venue correlation signals. This article proposes a novel approach using THRML (Thermodynamic Hypergraphical Model Library), a JAX-based library for probabilistic graphical models, to model venue correlations as an Ising energy-based model. By leveraging conditional (clamped) sampling, the THRML agent observes partial market state (a set of context venue outcomes) and infers the best routing decision based on learned correlations. The results demonstrate that THRML achieves significant cumulative regret reduction compared to contextual Thompson Sampling and <span class="math inline">\(\epsilon\)</span>-greedy baselines on both synthetic and real cryptocurrency market data, validating the power of conditional inference for smart order routing.</p>
+</section>
+<section id="introduction" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="introduction"><span class="header-section-number">2</span> Introduction</h2>
+<p>Financial order routing presents a fundamental decision problem: given multiple trading venues (exchanges, dark pools), where should a trader send their order to achieve the best execution? This decision must often be made with incomplete information. After all, the trader cannot simultaneously observe the execution quality at all venues before committing to one.</p>
+<section id="challenge" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="challenge"><span class="header-section-number">2.1</span> The Multi-Venue Challenge and Opportunity</h3>
+<p>Modern financial markets are fragmented across numerous trading venues. In cryptocurrency markets alone, traders must choose between dozens of exchanges, each with different liquidity profiles, fee structures, and momentary execution quality. The optimal venue changes over time, creating a learning problem that traditional approaches model as a multi-armed bandit. However, standard bandit algorithms treat each venue as independent. In reality, venues are often correlated: a favorable price movement on one exchange tends to predict similar movements on others due to arbitrage activity and shared market microstructure.</p>
+<p>Consider a scenario where, before making a routing decision, the trader can observe the most recent trade outcomes at a subset of venues (the “context venues”). Given a model that captures cross-venue correlations, this context can be used to make better predictions about unobserved venues. This is precisely where <strong>conditional inference</strong> becomes powerful. Traditional contextual bandits fail to fully exploit this structure because they treat each context as a separate learning problem, do not model the generative process that creates correlations, and cannot perform principled belief propagation across venues.</p>
+</section>
+<section id="approach" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="approach"><span class="header-section-number">2.2</span> The Proposed Approach: THRML and Energy-Based Models</h3>
+<p>This work proposes modeling the multi-venue system as an <strong>Ising Energy-Based Model (EBM)</strong>, where:</p>
+<ul>
+<li>Each venue is represented as a node (spin) in a graph</li>
+<li>Edges capture pairwise correlations between venues</li>
+<li>Node biases represent each venue’s individual tendency toward favorable/unfavorable outcomes</li>
+</ul>
+<p>Using THRML (Thermodynamic Hypergraphical Model Library), developed by Extropic AI for efficient probabilistic graphical model sampling, a THRML agent is implemented that:</p>
+<ol type="1">
+<li><strong>Learns</strong> the Ising model parameters (biases, couplings) from partial observations</li>
+<li><strong>Conditions</strong> on the observed venues by clamping their states</li>
+<li><strong>Samples</strong> from the conditional distribution to estimate success probabilities</li>
+<li><strong>Selects</strong> the venue with highest predicted success probability</li>
+</ol>
+<p>This approach directly leverages THRML’s core capability: efficient block Gibbs sampling with support for clamped (fixed) nodes, enabling conditional inference in a principled, GPU-accelerated manner<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+</section>
+<section id="contributions" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="contributions"><span class="header-section-number">2.3</span> Contributions</h3>
+<p>The main contributions of this work are:</p>
+<ol type="1">
+<li><p><strong>Novel problem framing</strong>: The routing problem is formalized as a conditional inference problem based on partial market observations.</p></li>
+<li><p><strong>THRML-based agent design</strong>: An agent is implemented that uses Ising EBM structure with clamped sampling to perform conditional inference over venue states, optimized for JAX accelerators.</p></li>
+<li><p><strong>Empirical validation</strong>: Evaluation results demonstrate on both synthetic (N=3) and real cryptocurrency market data (N=3) that THRML achieves lower regret compared to state-of-the-art contextual bandit baselines.</p></li>
+<li><p><strong>Hardware relevance</strong>: The proposed approach is designed to be compatible with future Extropic thermodynamic hardware, which promises up to 10,000× energy efficiency improvements <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> for probabilistic sampling workloads.</p></li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="background" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="background"><span class="header-section-number">3</span> Background: THRML and Energy-Based Models</h2>
+<p>Energy-Based Models (EBMs) represent probability distributions through an energy function <span class="math inline">\(E(\mathbf{x})\)</span>, where the probability of a state follows the Boltzmann distribution:</p>
+<p><span class="math display">\[P(\mathbf{x}) = \frac{1}{Z} e^{-E(\mathbf{x})}\]</span></p>
+<p>where <span class="math inline">\(Z = \sum_{\mathbf{x}'} e^{-E(\mathbf{x}')}\)</span> is the <strong>partition function</strong>, a normalization constant that ensures all probabilities sum to one. Low-energy states are more probable, and the shape of the distribution is controlled by the energy landscape.</p>
+<section id="ising" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="ising"><span class="header-section-number">3.1</span> The Ising Model</h3>
+<p>The <strong>Ising model</strong> is a classical EBM defined by the Hamiltonian (energy function) <span class="math inline">\(H(\mathbf{x})\)</span>:</p>
+<p><span class="math display">\[H(\mathbf{x}) = - \left( \sum_i h_i x_i + \sum_{(i,j) \in \mathcal{E}} J_{ij} x_i x_j \right)\]</span></p>
+<p>The probability of a configuration <span class="math inline">\(\mathbf{x}\)</span> determines the system’s thermodynamics via the Gibbs measure:</p>
+<p><span class="math display">\[P(\mathbf{x}) = \frac{1}{Z_\beta} e^{-\beta H(\mathbf{x})}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{x} \in \{-1, +1\}^N\)</span> are spin variables, <span class="math inline">\(h_i\)</span> are biases, <span class="math inline">\(J_{ij}\)</span> are coupling weights, and <span class="math inline">\(\beta\)</span> is the inverse temperature (controlling the “sharpness” of the distribution). Positive couplings (<span class="math inline">\(J_{ij} &gt; 0\)</span>) lower the energy when spins align, making correlated states more probable.</p>
+</section>
+<section id="jax-sampling" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="jax-sampling"><span class="header-section-number">3.2</span> THRML: GPU-Accelerated Probabilistic Sampling</h3>
+<p>THRML (Thermodynamic Hypergraphical Model Library) is a JAX-based Python library developed by Extropic AI for sampling probabilistic graphical models:</p>
+<blockquote class="blockquote">
+<p>“THRML is a JAX library for building and sampling probabilistic graphical models, with a focus on efficient block Gibbs sampling and energy-based models. Extropic is developing hardware to make sampling from certain classes of discrete PGMs massively more energy efficient; THRML provides GPU-accelerated tools for block sampling on sparse, heterogeneous graphs.”<br>
+— <em>THRML Documentation</em></p>
+</blockquote>
+<p>THRML uses <strong>block Gibbs sampling</strong>, which iteratively updates non-interacting nodes in parallel according to their conditional distributions. For the Ising model:</p>
+<p><span class="math display">\[P(x_i = +1 | x_{\text{nb}(i)}) = \sigma\left(2\beta \left( h_i + \sum_{j \in \text{nb}(i)} J_{ij} x_j \right)\right)\]</span></p>
+<p>The critical capability for this application is THRML’s support for <strong>clamped blocks: </strong>nodes fixed to observed values during sampling. This enables conditional inference:</p>
+<p><span class="math display">\[P(X_{\text{free}} | X_{\text{clamped}} = x_{\text{obs}})\]</span></p>
+<hr>
+</section>
+</section>
+<section id="formulation" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="formulation"><span class="header-section-number">4</span> Problem Formulation: Conditional Routing</h2>
+<p>This section formally defines the conditional routing problem and contrasts it with standard bandit settings.</p>
+<section id="setting" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="setting"><span class="header-section-number">4.1</span> Problem Setting</h3>
+<p>Consider a market with <span class="math inline">\(n\)</span> trading venues. At each time step <span class="math inline">\(t\)</span>:</p>
+<ol type="1">
+<li><p><strong>Environment</strong>: The market generates a joint outcome vector <span class="math inline">\(\mathbf{o}_t \in \{-1, +1\}^n\)</span>. We specifically model a competitive execution setting where exactly one venue provides a favorable outcome (<span class="math inline">\(+1\)</span>) per time step, and all others are unfavorable (<span class="math inline">\(-1\)</span>).</p></li>
+<li><p><strong>Context observation</strong>: The agent observes a set of “context venues” <span class="math inline">\(\mathcal{C}_t \subset \{1, \ldots, n\}\)</span> and their outcomes <span class="math inline">\(\mathbf{o}_{t,\mathcal{C}_t}\)</span> by reading the venue’s public market data feed (e.g., order book updates). This is the partial information available before routing.</p></li>
+<li><p><strong>Routing decision</strong>: Based on the context, the agent selects a venue <span class="math inline">\(a_t \in \{1, \ldots, n\} \setminus \mathcal{C}_t\)</span> to route its order<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p></li>
+<li><p><strong>Feedback</strong>: The agent observes the outcome <span class="math inline">\(o_{t,a_t}\)</span> of its selected venue.</p></li>
+<li><p><strong>Regret</strong>: The agent’s performance is measured by <strong>realized counterfactual regret</strong>, defined as the difference between the outcome the agent <em>would have</em> received had it acted optimally (according to the oracle) and the outcome it actually observed: <span class="math display">\[r_t = o_{t,a^*_t} - o_{t,a_t}\]</span> where <span class="math inline">\(a^*_t = \arg\max_{a \notin \mathcal{C}_t} o_{t,a}\)</span> is the choice of an omniscient oracle that observes the actual realized rewards for the available venues (providing a strict upper bound on performance).</p></li>
+</ol>
+<p>The goal is to minimize cumulative realized regret <span class="math inline">\(R_T = \sum_{t=1}^{T} r_t\)</span> over <span class="math inline">\(T\)</span> time steps.</p>
+</section>
+<section id="modes" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="modes"><span class="header-section-number">4.2</span> Context Modes</h3>
+<p>Two context observation protocols are considered:</p>
+<ul>
+<li><p><strong>Fixed context</strong>: The context venues are always the same (e.g., venues 0 through <span class="math inline">\(K-1\)</span>). This represents scenarios where a trader has fixed real-time data feeds.</p></li>
+<li><p><strong>Random context</strong>: The context venues are selected uniformly at random each step. This represents scenarios where partial market data arrives from different sources unpredictably.</p></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="methodology" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="methodology"><span class="header-section-number">5</span> Methodology: Agent Design</h2>
+<section id="baselines" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="baselines"><span class="header-section-number">5.1</span> Baseline Agents: Contextual Bandits</h3>
+<p>Two baseline agents are implemented for comparison. Since the environment consists of <strong>discrete context states</strong> and <strong>binary success/failure rewards</strong>, we employ tabular bandit approaches:</p>
+<ul>
+<li><strong>Contextual ε-Greedy</strong>: Maintains context-specific success/count statistics with ε=0.1 exploration and a discount factor for adaptation.</li>
+<li><strong>Contextual Thompson Sampling (CTS)</strong>: Uses Beta-distributed posteriors for each context-venue pair, sampling from <span class="math inline">\(Beta(\alpha, \beta)\)</span> to make routing decisions, and applies a discount factor for adaptation.</li>
+</ul>
+</section>
+<section id="ising-inference" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="ising-inference"><span class="header-section-number">5.2</span> THRML Agent: Conditional Ising Inference</h3>
+<p>The THRML agent models the venue system as an Ising EBM and uses clamped sampling for conditional inference.</p>
+<p><strong>Selection via clamping</strong>: Given context venues <span class="math inline">\(\mathcal{C}\)</span> with outcomes <span class="math inline">\(\mathbf{o}_{\mathcal{C}}\)</span>, the agent constructs an <code>IsingEBM</code>, clamps the context nodes to their observed states, and uses THRML’s <code>sample_states</code> to draw samples from <span class="math inline">\(P(X_{\text{free}} | X_{\mathcal{C}} = \mathbf{o}_{\mathcal{C}})\)</span>. The update rule also incorporates a mean-field signal propagation mechanism (propagation_damping=0.3) that accelerates belief diffusion across the graph. This mechanism helps propagate information from clamped nodes to free nodes via the coupling matrix <span class="math inline">\(J\)</span> before sampling: <span class="math inline">\(\text{bias}_{new} \leftarrow \text{bias}_{old} + \eta \beta (J \cdot \mathbf{x}_{obs}) (1 - m_{obs})\)</span>.</p>
+<p><strong>Implementation optimization</strong>: To maintain high throughput, the implementation utilizes “Static Infrastructure Pre-building” (<code>build_thrml_infra</code>). For general cases (like the synthetic experiments), the agent uses <strong>dynamic node permutation</strong> to map context nodes to the model’s first <span class="math inline">\(K\)</span> indices. In the specific case of real-world experiments (N=3), the implementation leverages an optimized branching strategy (using <code>lax.switch</code>) to select strictly pre-compiled static graphs. Both methods satisfy the library’s static block structure without requiring expensive graph reconstruction inside the performance loop.</p>
+<hr>
+</section>
+</section>
+<section id="experiments" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="experiments"><span class="header-section-number">6</span> Experiments</h2>
+<section id="synthetic" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="synthetic"><span class="header-section-number">6.1</span> Synthetic Data Experiments</h3>
+<p>Synthetic environments evaluated the approach across <strong>3 venues</strong> with a <strong>1-venue context window</strong>.</p>
+<p>The synthetic experiments serve as a theoretical validation to confirm that the THRML agent can accurately recover the underlying parameters of a known Ising system, a necessary prerequisite for its application to real-world data.</p>
+<p><strong>Experimental Setup:</strong></p>
+<ul>
+<li>3 venues, 10,000 time steps per run</li>
+<li>200 independent seeds for statistical significance</li>
+<li>Adaptation rate <span class="math inline">\(\alpha = 0.05\)</span> (<code>learning_rate</code>), discount factor 0.995, and coupling decay 0.995.</li>
+<li>THRML precision: <code>n_warmup=50</code>, <code>n_samples=100</code>, <code>steps_per_sample=4</code>.</li>
+</ul>
+<p><strong>Results – Fixed Context Mode (K=1):</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Scenario</th>
+<th>Ctx-ε-Greedy</th>
+<th>Ctx-Thompson</th>
+<th>THRML-Cond</th>
+<th>THRML Benefit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IID Venues</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+<td><strong>Tie (Optimal)</strong></td>
+</tr>
+<tr class="even">
+<td>Correlated</td>
+<td>206.40</td>
+<td>5.99</td>
+<td><strong>2.21</strong></td>
+<td><strong>Win</strong></td>
+</tr>
+<tr class="odd">
+<td>Regime Shift</td>
+<td>2520.47</td>
+<td>3555.48</td>
+<td><strong>2154.07</strong></td>
+<td><strong>Win (-39%)</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 1: Mean cumulative regret in Fixed Context mode (N=3, K=1) after 10,000 steps. Zero regret in IID/Fixed signals that the optimal venue was always the context venue, resulting in a competitively forced zero-regret outcome for all agents.</em></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="docs/experiments/synthetic_data_files/figure-html/cell-17-output-2.png" class="img-fluid figure-img"></p>
+<figcaption>Cumulative regret in Fixed Context mode. From left to right: IID, Correlated, and Regime Shift scenarios.</figcaption>
+</figure>
+</div>
+<p><strong>Results – Random Context Mode (K=1):</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Scenario</th>
+<th>Ctx-ε-Greedy</th>
+<th>Ctx-Thompson</th>
+<th>THRML-Cond</th>
+<th>THRML Benefit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IID Venues</td>
+<td>664.12</td>
+<td>12.84</td>
+<td><strong>0.96</strong></td>
+<td><strong>Win</strong></td>
+</tr>
+<tr class="even">
+<td>Correlated</td>
+<td>1897.93</td>
+<td><strong>1416.11</strong></td>
+<td>1418.24</td>
+<td>Competitive</td>
+</tr>
+<tr class="odd">
+<td>Regime Shift</td>
+<td>2052.62</td>
+<td>2596.88</td>
+<td><strong>1444.48</strong></td>
+<td><strong>Win (-44%)</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 2: Mean cumulative regret in Random Context mode (N=3, K=1) after 10,000 steps.</em></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="docs/experiments/synthetic_data_files/figure-html/cell-18-output-2.png" class="img-fluid figure-img"></p>
+<figcaption>Cumulative regret in Random Context mode. From left to right: IID, Correlated, and Regime Shift scenarios.</figcaption>
+</figure>
+</div>
+<p><strong>Summary of Synthetic Findings:</strong></p>
+<ol type="1">
+<li><p><strong>Validation of Competitive Logic (IID Results)</strong>: In the “IID / Fixed” scenario, all agents achieve exactly <strong>0.0 cumulative regret</strong>. This validates the “Competitive Labeling” design: when the dominant winner (Venue 0) is blocked as the context, the best <em>available</em> option is a “loser” (-1.0), and all agents correctly identify this, matching the Oracle’s enforced decision. This confirms the experimental rigorousness.</p></li>
+<li><p><strong>Recovery of Static Correlations</strong>: The “Correlated / Fixed” scenario provides the strongest evidence of THRML’s parameter recovery. THRML achieves a negligible regret of <strong>2.21</strong>, significantly outperforming Thompson Sampling (5.99) and ε-Greedy (206.40). This demonstrates that THRML’s Ising inference allows it to identify the correlation structure almost instantly, whereas traditional bandits require more samples to converge.</p></li>
+<li><p><strong>Efficient Adaptation to Non-Stationarity</strong>: In “Regime Shift” scenarios, THRML consistently outperforms baselines by approximately <strong>40%</strong>.</p>
+<ul>
+<li><strong>Fixed Context</strong>: THRML (2154) vs CTS (3555).</li>
+<li><strong>Random Context</strong>: THRML (1444) vs CTS (2597). This proves that the thermodynamic agent’s <code>coupling_decay</code> and <code>discount_factor</code> mechanisms allow it to shed outdated beliefs and adapt to new market regimes much faster than the Beta distributions of Thompson Sampling.</li>
+</ul></li>
+<li><p><strong>Robustness in Random Contexts</strong>: Even in “IID / Random”, where no correlations exist to exploit, THRML outperforms Thompson Sampling (0.96 vs 12.84), suggesting its internal regularization prevents it from hallucinating correlations (“overfitting”) while still optimizing for the immediate available rewards more efficiently than the baseline.</p></li>
+</ol>
+</section>
+<section id="real-world" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="real-world"><span class="header-section-number">6.2</span> Real-World Data Experiments</h3>
+<p>Evaluation is performed on aligned trade data from Coinbase, Kraken, and Bitstamp (N=3, K=1).</p>
+<p><strong>Experimental Setup:</strong></p>
+<ul>
+<li><strong>Data Acquisition</strong>: A rolling window mechanism fetches the most recent 10,000 seconds of trade data to ensure relevance to current market conditions<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</li>
+<li><strong>10,000 time steps</strong> of aligned market data captured from this window.</li>
+<li><strong>200 independent runs</strong> to ensure reproducible statistics<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</li>
+<li>Adaptation rate <span class="math inline">\(\alpha = 0.05\)</span> (<code>learning_rate</code>), discount factor 0.995, and coupling decay 0.995.</li>
+<li>THRML precision: <code>n_warmup=50</code>, <code>n_samples=100</code>, <code>steps_per_sample=4</code>.</li>
+</ul>
+<p><strong>Results – Real Market Data:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 27%">
+<col style="width: 39%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Context Mode</th>
+<th>Contextual ε-Greedy</th>
+<th>Contextual Thompson Sampling</th>
+<th>THRML</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fixed</td>
+<td>4823.86</td>
+<td>4532.97</td>
+<td>3914.27</td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td>5141.93</td>
+<td>5000.64</td>
+<td>3775.45</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="docs/experiments/real_data_files/figure-html/cell-16-output-2.png" class="img-fluid figure-img"></p>
+<figcaption>Cumulative Regret: Fixed Context (Real Data)</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="docs/experiments/real_data_files/figure-html/cell-16-output-4.png" class="img-fluid figure-img"></p>
+<figcaption>Cumulative Regret: Random Context (Real Data)</figcaption>
+</figure>
+</div>
+<p><em>Table 3: Cumulative regret on real cryptocurrency data (200 seeds).</em></p>
+<p><strong>Summary of Real-World Findings:</strong></p>
+<ol type="1">
+<li><p><strong>Consistent Superiority</strong>: THRML outperformed both Contextual <span class="math inline">\(\epsilon\)</span>-Greedy and Contextual Thompson Sampling significantly in both context modes. The 14-25% reduction in regret validates that the Ising-based conditional inference successfully captures real market micro-correlations. The superior performance of THRML highlights the cost of the independence assumption inherent in standard tabular approaches.</p></li>
+<li><p><strong>Validation of Synthetic Trends</strong>: The performance gap mirrors the “Regime Shift” scenario from the synthetic experiments. This suggests that real cryptocurrency markets exhibit the kind of non-stationary, correlated behavior that the THRML agent is specifically designed to exploit.</p></li>
+<li><p><strong>Efficiency in Dynamic Environments</strong>: In the “Random Context” mode, where the agent must generalize from a constantly changing partial view of the market, THRML achieved its lowest absolute regret (3775.45). This highlights the strength of the energy-based model: it builds a global representation of the system’s correlations, allowing it to perform strong inference regardless of which specific node is clamped as the context.</p></li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="conclusion" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">7</span> Conclusion</h2>
+<p>This study has demonstrated that <strong>conditional inference using energy-based models greatly improves order routing in correlated multi-venue environments</strong>. Framing the routing problem as conditional inference over an Ising model, and leveraging THRML’s clamped sampling capabilities, enables significant regret reduction compared to state-of-the-art contextual bandit approaches.</p>
+<p>The results are conclusive:</p>
+<ol type="1">
+<li><p><strong>Synthetic Benchmarks</strong>: THRML matched optimal baselines in IID settings and reduced regret by ~40% in complex, non-stationary correlation environments.</p></li>
+<li><p><strong>Real-World Validation</strong>: On trade data from Coinbase, Kraken, and Bitstamp, THRML consistently outperformed Thompson Sampling by 14-25%.</p>
+<p>By effectively modeling the “thermodynamics” of market correlations, the THRML agent turns partial information into a competitive advantage, offering a promising new direction for smart order routing in fragmented financial markets.</p></li>
+</ol>
+</section>
+<section id="references" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="references"><span class="header-section-number">8</span> References</h2>
+<ol type="1">
+<li><strong>THRML Documentation</strong>: Extropic AI. “THRML: Thermodynamic Hypergraphical Model Library.” <a href="https://docs.thrml.ai/">https://docs.thrml.ai/</a></li>
+<li><strong>THRML Repository</strong>: Extropic AI. “THRML GitHub Repository.” <a href="https://github.com/extropic-ai/thrml">https://github.com/extropic-ai/thrml</a></li>
+<li><strong>JAX</strong>: Bradbury, J., et al.&nbsp;“JAX: composable transformations of Python+NumPy programs.” <a href="http://github.com/google/jax">http://github.com/google/jax</a></li>
+<li><strong>Ising Model</strong>: Ising, E. (1925). “Beitrag zur Theorie des Ferromagnetismus.” <em>Zeitschrift für Physik</em>, 31(1), 253-258.</li>
+<li><strong>Reinforcement Learning</strong>: Sutton, R. S., &amp; Barto, A. G. (2018). <em>Reinforcement Learning: An Introduction</em>. MIT Press. (For <span class="math inline">\(\epsilon\)</span>-Greedy and general bandit formulation).</li>
+<li><strong>Contextual Thompson Sampling</strong>: Agrawal, S., &amp; Goyal, N. (2013). “Thompson Sampling for Contextual Bandits with Linear Payoffs.” <em>International Conference on Machine Learning (ICML)</em>.</li>
+</ol>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>THRML inference is simulated via block Gibbs sampling on the GPU. While this incurs a simulation overhead compared to arithmetic baselines on digital hardware, the proposed approach targets future thermodynamic sampling units (TSUs) where sampling is a native physical operation.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>This work addresses the problem of execution uncertainty. We consider settings where the market/venue state is partially observed or stochastic (e.g., dark pools or rapidly changing order books), so the agent must learn probabilistic execution outcomes, rather than optimizing against a single static snapshot.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Projected efficiency refers to the future TSU hardware architecture; current studies validate algorithmic superiority via GPU-based simulation.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Context venues are excluded from the action set to enforce a generalization task. The objective is to test the agent’s ability to infer the state of unobserved venues via learned correlations, rather than simply exploiting the visible information in the context window.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>The provided research notebook defaults to a live rolling window. The results presented here are from a fixed archival snapshot (1770037944132 to 1770047944132, February 2, 2026) to ensure consistent comparison.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Processed in batches of 50 seeds to manage GPU memory constraints, distinct from the fully parallelized synthetic execution.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

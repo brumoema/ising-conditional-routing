@@ -1,0 +1,15 @@
+.venv/
+.agent/
+.github/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+.quarto/
+*.quarto_ipynb
+/.quarto/
+**/*.quarto_ipynb
+.env
+.env.local
+*.log

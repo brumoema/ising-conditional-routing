@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Conditional Inference for Financial Order Routing Using Energy-Based Models – Conditional Inference: THRML &amp; Order Routing</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-a35d343c8bdbcb87d3b82ed68e48a46c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../experiments/synthetic_data.html">Experiments</a></li><li class="breadcrumb-item"><a href="../experiments/real_data.html">REAL DATA<br>EXPERIMENT</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../experiments/synthetic_data.html">Experiments</a></li><li class="breadcrumb-item"><a href="../experiments/real_data.html">REAL DATA<br>EXPERIMENT</a></li></ol></nav>
+      <h1 class="title"><a href="../index.html">Conditional Inference for Financial Order Routing Using Energy-Based Models</a></h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Conditional Inference: THRML &amp; Order Routing</a> 
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Article</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html#overview" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html#introduction" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html#background" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Literature Review</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html#formulation" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Problem Formulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html#methodology" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Methodology</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html#experiments" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Results</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html#conclusion" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Conclusion</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html#references" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Experiments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../experiments/synthetic_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SYNTHETIC DATA<br>EXPERIMENT</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../experiments/real_data.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">REAL DATA<br>EXPERIMENT</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p><a href="https://colab.research.google.com/github/brumoema/ising-conditional-routing/blob/main/experiments/real_data.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid"></a></p>
+<section id="conditional-routing-experiment---live-historical-data" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Conditional Routing Experiment - Live Historical Data</h1>
+<p><strong>NOTE</strong>: This notebook is configured to run on <strong>fresh historical data</strong> using a rolling window. The results will differ from the fixed dataset used in the article.</p>
+<section id="logic-and-workflow" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="logic-and-workflow"><span class="header-section-number">1.1</span> Logic and Workflow:</h2>
+<ul>
+<li><strong>Data Processing</strong>: Synchronizes raw trade data into time buckets, labeling only the single best venue as ‘favorable’ (argmax).</li>
+<li><strong>Fair Information Sharing</strong>: Baselines update only on the Selected Venue, while THRML performs joint updates on multiple nodes (context + routed).</li>
+<li><strong>Conditional Context</strong>: At each step, the agent observes the outcome of a ‘context venue’ before deciding where to route the order.</li>
+<li><strong>THRML Advantage</strong>: Leverages learned Ising correlations between exchanges to perform conditional inference (via clamped sampling) to identify the venue with the highest probability of success given the context.</li>
+</ul>
+</section>
+<section id="key-hyperparameters" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="key-hyperparameters"><span class="header-section-number">1.2</span> Key Hyperparameters</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 35%">
+<col style="width: 22%">
+<col style="width: 41%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>n_venues</code></td>
+<td>3</td>
+<td>Number of trading venues</td>
+</tr>
+<tr class="even">
+<td><code>n_steps</code></td>
+<td>10,000</td>
+<td>Steps per experiment run</td>
+</tr>
+<tr class="odd">
+<td><code>n_seeds</code></td>
+<td>200</td>
+<td>Independent runs for statistical significance</td>
+</tr>
+<tr class="even">
+<td><code>discount_factor</code></td>
+<td>0.995</td>
+<td>Forgetting factor for non-stationary adaptation</td>
+</tr>
+<tr class="odd">
+<td><code>learning_rate</code></td>
+<td>0.05</td>
+<td>THRML learning rate</td>
+</tr>
+<tr class="even">
+<td><code>coupling_decay</code></td>
+<td>0.995</td>
+<td>Decay factor for edge weights (regularization)</td>
+</tr>
+<tr class="odd">
+<td><code>steps_per_sample</code></td>
+<td>4</td>
+<td>Gibbs sampling thinning parameter</td>
+</tr>
+<tr class="even">
+<td><code>propagation_damping</code></td>
+<td>0.3</td>
+<td>Mean-field signal propagation factor</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="agents-compared" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="agents-compared"><span class="header-section-number">1.3</span> Agents Compared</h2>
+<ul>
+<li><strong>Contextual ε-Greedy</strong>: Maintains context-specific success/count statistics with ε=0.1 exploration</li>
+<li><strong>Contextual Thompson Sampling</strong>: Uses Beta-distributed posteriors conditioned on context</li>
+<li><strong>THRML</strong>: Leverages an Ising model to capture correlations between venues and performs probabilistic inference using Gibbs sampling</li>
+</ul>
+</section>
+<section id="context-modes" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="context-modes"><span class="header-section-number">1.4</span> Context Modes</h2>
+<ul>
+<li><strong>Fixed Context</strong>: Always observe Venue 0’s outcome as context</li>
+<li><strong>Random Context</strong>: Randomly select which venue provides context each step</li>
+</ul>
+</section>
+</section>
+<section id="conditional-routing-experiment---historical-data" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Conditional Routing Experiment - Historical Data</h1>
+<section id="setup-infrastructure" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="setup-infrastructure"><span class="header-section-number">2.1</span> 1. Setup &amp; Infrastructure</h2>
+<div id="0c0e97e1" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install necessary libraries for the experiment in the Colab environment</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>pip install <span class="op">-</span>q ccxt pandas thrml<span class="op">&gt;=</span><span class="fl">0.1.3</span> matplotlib</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="8eb47f67" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- STANDARD IMPORTS ---</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> NamedTuple, Tuple, Dict</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax.numpy <span class="im">as</span> jnp</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> jax <span class="im">import</span> random, lax, vmap, jit</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thrml <span class="im">import</span> SpinNode, Block, SamplingSchedule, sample_states</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> thrml.models <span class="im">import</span> IsingEBM, IsingSamplingProgram, hinton_init</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ccxt</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"--- HISTORICAL DATA EXPERIMENT ---"</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"This notebook fetches historical trade data for reproducibility."</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Ready to go!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>--- HISTORICAL DATA EXPERIMENT ---
+This notebook fetches historical trade data for reproducibility.
+Ready to go!</code></pre>
+</div>
+</div>
+</section>
+<section id="configuration" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="configuration"><span class="header-section-number">2.2</span> 2. Configuration</h2>
+<div id="a5fadbc2" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Configuration settings for the experiments and agents</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ExperimentConfig(NamedTuple):</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    n_venues: <span class="bu">int</span> <span class="op">=</span> <span class="dv">3</span>  <span class="co"># Number of trading venues participating in the simulation</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    n_steps: <span class="bu">int</span> <span class="op">=</span> <span class="dv">10000</span>  <span class="co"># Total simulation steps per independent run</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    n_seeds: <span class="bu">int</span> <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    window_size: <span class="bu">int</span> <span class="op">=</span> <span class="dv">200</span>  <span class="co"># Memory depth for incremental covariance tracking</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    beta: <span class="bu">float</span> <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    n_warmup: <span class="bu">int</span> <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    n_samples: <span class="bu">int</span> <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    steps_per_sample: <span class="bu">int</span> <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    discount_factor: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.995</span>  <span class="co"># Exponential decay factor for adapting to non-stationary shifts</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    learning_rate: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.05</span>  <span class="co"># Step size for bias and edge weight updates</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    coupling_decay: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.995</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    propagation_damping: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.3</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    context_mode: <span class="bu">str</span> <span class="op">=</span> <span class="st">"fixed"</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    damp_coupling: <span class="bu">bool</span> <span class="op">=</span> <span class="va">True</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="39068533" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AgentState_CEG(NamedTuple):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    successes: jnp.ndarray</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    counts: jnp.ndarray</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AgentState_CTS(NamedTuple):</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    alphas: jnp.ndarray</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    betas: jnp.ndarray</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AgentState_THRML(NamedTuple):</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    biases: jnp.ndarray</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    weights: jnp.ndarray</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    history_buffer: jnp.ndarray</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    history_ptr: jnp.ndarray</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    full_history_count: jnp.ndarray</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    cov_sum: jnp.ndarray</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    pair_counts: jnp.ndarray</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="b3d01dad" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> thrml_init(n_venues, window_size<span class="op">=</span><span class="dv">200</span>):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Standardized initialization for THRML Agent State.</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Ensures memory depth is consistent across experiments.</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> AgentState_THRML(</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        biases<span class="op">=</span>jnp.zeros(n_venues),</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        weights<span class="op">=</span>jnp.zeros((n_venues <span class="op">*</span> (n_venues <span class="op">-</span> <span class="dv">1</span>)) <span class="op">//</span> <span class="dv">2</span>),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        history_buffer<span class="op">=</span>jnp.zeros((window_size, n_venues)),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        history_ptr<span class="op">=</span>jnp.array(<span class="dv">0</span>, dtype<span class="op">=</span>jnp.int32),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        full_history_count<span class="op">=</span>jnp.array(<span class="dv">0</span>, dtype<span class="op">=</span>jnp.int32),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        cov_sum<span class="op">=</span>jnp.zeros((n_venues, n_venues)),</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        pair_counts<span class="op">=</span>jnp.zeros((n_venues, n_venues))</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> thrml_update(state, outcomes, obs_mask, model_node_moms, model_edge_moms, </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>                 discount_factor, beta, learning_rate, </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>                 propagation_damping<span class="op">=</span><span class="fl">0.3</span>, coupling_decay<span class="op">=</span><span class="fl">1.0</span>, damp_coupling<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">    Perform the learning step using the THRML Ising model.</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">    Uses contrastive divergence principles (Data Moments vs Model Moments).</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    n_venues <span class="op">=</span> state.biases.shape[<span class="dv">0</span>]</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    triu_idx <span class="op">=</span> jnp.triu_indices(n_venues, <span class="dv">1</span>)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1. Update Node Biases (h)</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    J <span class="op">=</span> jnp.zeros((n_venues, n_venues)).at[triu_idx].<span class="bu">set</span>(state.weights)</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    J <span class="op">=</span> J <span class="op">+</span> J.T</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    influence <span class="op">=</span> propagation_damping <span class="op">*</span> learning_rate <span class="op">*</span> beta <span class="op">*</span> (J <span class="op">@</span> (outcomes <span class="op">*</span> obs_mask)) <span class="op">*</span> (<span class="fl">1.0</span> <span class="op">-</span> obs_mask)</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    new_biases <span class="op">=</span> (state.biases <span class="op">*</span> discount_factor) <span class="op">+</span> (learning_rate <span class="op">*</span> beta <span class="op">*</span> (outcomes <span class="op">*</span> obs_mask <span class="op">-</span> model_node_moms <span class="op">*</span> obs_mask)) <span class="op">+</span> influence</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2. Update Empirical Covariance (XX^T)</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    old_obs <span class="op">=</span> state.history_buffer[state.history_ptr]</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    old_present <span class="op">=</span> (old_obs <span class="op">!=</span> <span class="dv">0</span>).astype(jnp.float32)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    new_obs <span class="op">=</span> outcomes <span class="op">*</span> obs_mask</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    new_present <span class="op">=</span> obs_mask</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    new_cov_sum <span class="op">=</span> state.cov_sum <span class="op">-</span> jnp.outer(old_obs, old_obs) <span class="op">+</span> jnp.outer(new_obs, new_obs)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    new_pair_counts <span class="op">=</span> state.pair_counts <span class="op">-</span> jnp.outer(old_present, old_present) <span class="op">+</span> jnp.outer(new_present, new_present)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 3. Handle Cyclic Buffer</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    new_buffer <span class="op">=</span> state.history_buffer.at[state.history_ptr].<span class="bu">set</span>(new_obs)</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    new_ptr <span class="op">=</span> (state.history_ptr <span class="op">+</span> <span class="dv">1</span>) <span class="op">%</span> state.history_buffer.shape[<span class="dv">0</span>]</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    new_count <span class="op">=</span> jnp.minimum(state.full_history_count <span class="op">+</span> <span class="dv">1</span>, state.history_buffer.shape[<span class="dv">0</span>])</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 4. Update Edge Weights (J)</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>    emp_cov <span class="op">=</span> new_cov_sum <span class="op">/</span> jnp.maximum(new_pair_counts, <span class="fl">1.0</span>)</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>    emp <span class="op">=</span> emp_cov[triu_idx]</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>    pairs_observed <span class="op">=</span> new_pair_counts[triu_idx] <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>    innovation <span class="op">=</span> beta <span class="op">*</span> learning_rate <span class="op">*</span> (emp <span class="op">-</span> model_edge_moms)</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>    innovation <span class="op">=</span> jnp.where(damp_coupling, innovation, <span class="fl">0.0</span>)</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>    new_weights <span class="op">=</span> (state.weights <span class="op">+</span> jnp.where(pairs_observed, innovation, <span class="fl">0.0</span>)) <span class="op">*</span> discount_factor <span class="op">*</span> coupling_decay</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> AgentState_THRML(new_biases, new_weights, new_buffer, new_ptr, new_count, new_cov_sum, new_pair_counts)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="8b16f426" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_thrml_infra(n_venues, config):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Pre-calculate static graph paths to avoid recompilation overhead in JAX loop."""</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    nodes <span class="op">=</span> [SpinNode() <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_venues)]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    edges <span class="op">=</span> [(nodes[i], nodes[j]) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_venues) <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(i<span class="op">+</span><span class="dv">1</span>, n_venues)]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    schedule <span class="op">=</span> SamplingSchedule(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        n_warmup<span class="op">=</span>config.n_warmup, </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        n_samples<span class="op">=</span>config.n_samples, </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        steps_per_sample<span class="op">=</span>config.steps_per_sample</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    infra_list <span class="op">=</span> []</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> v_idx <span class="kw">in</span> <span class="bu">range</span>(n_venues):</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        infra_list.append({</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">'clamped'</span>: Block([nodes[v_idx]]),</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>            <span class="st">'free'</span>: [Block([nodes[i]]) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_venues) <span class="cf">if</span> i <span class="op">!=</span> v_idx]</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># NEW: Add static logic for unclamped joint sampling</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Note: Use serial schedule (one node per block) for fully connected graph</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    serial_blocks <span class="op">=</span> [Block([n]) <span class="cf">for</span> n <span class="kw">in</span> nodes]</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    joint_infra <span class="op">=</span> {<span class="st">'free'</span>: serial_blocks, <span class="st">'clamped'</span>: []}</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">'nodes'</span>: nodes, <span class="st">'edges'</span>: edges, <span class="st">'sched'</span>: schedule, </span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">'list'</span>: infra_list, <span class="st">'joint'</span>: joint_infra, <span class="st">'full_block'</span>: [Block(nodes)]</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="6f3b603a" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Context helper functions to manage venue outcomes</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_context_index(context_venue: <span class="bu">int</span>, context_outcome: jnp.ndarray) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Convert (venue, outcome) to a single context index.</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Context index = context_venue * 2 + (1 if outcome &gt; 0 else 0)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    outcome_bit <span class="op">=</span> jnp.where(context_outcome <span class="op">&gt;</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> context_venue <span class="op">*</span> <span class="dv">2</span> <span class="op">+</span> outcome_bit</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Baseline agent initialization functions</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ceg_init(n_venues: <span class="bu">int</span>) <span class="op">-&gt;</span> AgentState_CEG:</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Initialize Contextual Epsilon-Greedy agent state."""</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    n_contexts <span class="op">=</span> n_venues <span class="op">*</span> <span class="dv">2</span>  <span class="co"># Each venue × 2 outcomes</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> AgentState_CEG(</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        successes<span class="op">=</span>jnp.zeros((n_contexts, n_venues)),</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        counts<span class="op">=</span>jnp.zeros((n_contexts, n_venues))</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cts_init(n_venues: <span class="bu">int</span>, prior_alpha: <span class="bu">float</span><span class="op">=</span><span class="fl">1.0</span>, prior_beta: <span class="bu">float</span><span class="op">=</span><span class="fl">1.0</span>) <span class="op">-&gt;</span> AgentState_CTS:</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Initialize Contextual Thompson Sampling agent state."""</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    n_contexts <span class="op">=</span> n_venues <span class="op">*</span> <span class="dv">2</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> AgentState_CTS(</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>        alphas<span class="op">=</span>jnp.ones((n_contexts, n_venues)) <span class="op">*</span> prior_alpha,</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>        betas<span class="op">=</span>jnp.ones((n_contexts, n_venues)) <span class="op">*</span> prior_beta</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ceg_select(state, key, cidx, routing_mask, epsilon<span class="op">=</span><span class="fl">0.1</span>):</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Choose venue using tabular E-Greedy given context."""</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> state.counts.shape[<span class="dv">1</span>]</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    means <span class="op">=</span> jnp.where(state.counts[cidx] <span class="op">&gt;</span> <span class="dv">0</span>, state.successes[cidx] <span class="op">/</span> state.counts[cidx], <span class="fl">0.5</span>)</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    k_e, k_r <span class="op">=</span> random.split(key)</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    act <span class="op">=</span> jnp.where(random.uniform(k_e) <span class="op">&lt;</span> epsilon, </span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>                    random.categorical(k_r, jnp.zeros(n) <span class="op">+</span> routing_mask), </span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>                    jnp.argmax(means <span class="op">+</span> routing_mask))</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> act</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cts_select(state, key, cidx, routing_mask):</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Choose venue using Bayesian sampling given context."""</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>    samples <span class="op">=</span> random.beta(key, state.alphas[cidx], state.betas[cidx])</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jnp.argmax(samples <span class="op">+</span> routing_mask)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="d70a2e8a" class="cell" data-execution_count="8">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># =============================================================================</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ROLLING WINDOW CONFIGURATION - ALWAYS FETCHES LATEST 10K STEPS</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># =============================================================================</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This experiment uses a ROLLING 10,000 second window that automatically</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># fetches the most recent available data. This ensures:</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   1. Data is always fresh and reflects current market conditions</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   2. Results are based on up-to-date exchange behavior</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   3. Each run independently validates the experiment on new data</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># The window ends 5 minutes ago (to ensure trade data has propagated)</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># and spans exactly 10,000 seconds (~2.78 hours) backward from there.</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># =============================================================================</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime, timezone</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Configuration</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>EXPECTED_STEPS <span class="op">=</span> <span class="dv">10000</span>  <span class="co"># Exactly 10k steps (10k seconds)</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>BUFFER_SECONDS <span class="op">=</span> <span class="dv">300</span>    <span class="co"># 5-minute buffer to ensure data availability</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate rolling window: ends 5 min ago, spans 10k seconds back</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>current_time_ms <span class="op">=</span> <span class="bu">int</span>(time.time() <span class="op">*</span> <span class="dv">1000</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>HIST_END_MS <span class="op">=</span> current_time_ms <span class="op">-</span> (BUFFER_SECONDS <span class="op">*</span> <span class="dv">1000</span>)  <span class="co"># 5 min ago</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>HIST_START_MS <span class="op">=</span> HIST_END_MS <span class="op">-</span> (EXPECTED_STEPS <span class="op">*</span> <span class="dv">1000</span>)    <span class="co"># 10k seconds before that</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the window</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>start_dt <span class="op">=</span> datetime.fromtimestamp(HIST_START_MS <span class="op">/</span> <span class="dv">1000</span>, tz<span class="op">=</span>timezone.utc)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>end_dt <span class="op">=</span> datetime.fromtimestamp(HIST_END_MS <span class="op">/</span> <span class="dv">1000</span>, tz<span class="op">=</span>timezone.utc)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">65</span>)</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"ROLLING WINDOW EXPERIMENT - LATEST 10,000 STEPS"</span>)</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">65</span>)</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Window Start: </span><span class="sc">{</span>start_dt<span class="sc">.</span>strftime(<span class="st">'%Y-%m-</span><span class="sc">%d</span><span class="st"> %H:%M:%S UTC'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Window End:   </span><span class="sc">{</span>end_dt<span class="sc">.</span>strftime(<span class="st">'%Y-%m-</span><span class="sc">%d</span><span class="st"> %H:%M:%S UTC'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Duration:     </span><span class="sc">{</span>EXPECTED_STEPS<span class="sc">:,}</span><span class="ss"> seconds (</span><span class="sc">{</span>EXPECTED_STEPS<span class="sc">:,}</span><span class="ss"> steps)"</span>)</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Data Age:     ~</span><span class="sc">{</span>BUFFER_SECONDS <span class="op">//</span> <span class="dv">60</span><span class="sc">}</span><span class="ss"> minutes old (buffer for propagation)"</span>)</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">65</span>)</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Note: Each run fetches fresh data, so results may vary slightly"</span>)</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"between runs due to different market conditions."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>=================================================================
+ROLLING WINDOW EXPERIMENT - LATEST 10,000 STEPS
+=================================================================
+Window Start: 2026-02-02 13:12:24 UTC
+Window End:   2026-02-02 15:59:04 UTC
+Duration:     10,000 seconds (10,000 steps)
+Data Age:     ~5 minutes old (buffer for propagation)
+=================================================================
+Note: Each run fetches fresh data, so results may vary slightly
+between runs due to different market conditions.</code></pre>
+</div>
+</div>
+<div id="d781378b" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>SYMBOL <span class="op">=</span> <span class="st">'BTC/USD'</span><span class="op">;</span> EXCHANGES <span class="op">=</span> [<span class="st">'coinbaseexchange'</span>, <span class="st">'kraken'</span>, <span class="st">'bitstamp'</span>]<span class="op">;</span> TIME_BUCKET_MS <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>TARGET_BUCKETS <span class="op">=</span> <span class="dv">10000</span>  <span class="co"># Rolling window: exactly 10,000 steps</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="c358ce19" class="cell" data-execution_count="10">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sync_trades_hist(exchange_name: <span class="bu">str</span>, start_ms: <span class="bu">int</span>, end_ms: <span class="bu">int</span>) <span class="op">-&gt;</span> pd.DataFrame:</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Fetch historical trades from exchange for a specific time window.</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    exchange <span class="op">=</span> <span class="bu">getattr</span>(ccxt, exchange_name)({<span class="st">'enableRateLimit'</span>: <span class="va">True</span>})</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    MAX_ITERATIONS <span class="op">=</span> <span class="dv">500</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_trade_timestamp(trade):</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'timestamp'</span> <span class="kw">in</span> trade <span class="kw">and</span> trade[<span class="st">'timestamp'</span>] <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> trade[<span class="st">'timestamp'</span>]</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'datetime'</span> <span class="kw">in</span> trade <span class="kw">and</span> trade[<span class="st">'datetime'</span>] <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>            <span class="im">from</span> datetime <span class="im">import</span> datetime</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>            dt <span class="op">=</span> datetime.fromisoformat(trade[<span class="st">'datetime'</span>].replace(<span class="st">'Z'</span>, <span class="st">'+00:00'</span>))</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="bu">int</span>(dt.timestamp() <span class="op">*</span> <span class="dv">1000</span>)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'info'</span> <span class="kw">in</span> trade:</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>            info <span class="op">=</span> trade[<span class="st">'info'</span>]</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="st">'date'</span> <span class="kw">in</span> info: <span class="cf">return</span> <span class="bu">int</span>(info[<span class="st">'date'</span>]) <span class="op">*</span> <span class="dv">1000</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="st">'timestamp'</span> <span class="kw">in</span> info: <span class="cf">return</span> <span class="bu">int</span>(info[<span class="st">'timestamp'</span>])</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">KeyError</span>(<span class="ss">f"Could not extract timestamp"</span>)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>        exchange.load_markets()</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>        symbol <span class="op">=</span> SYMBOL <span class="cf">if</span> SYMBOL <span class="kw">in</span> exchange.markets <span class="cf">else</span> <span class="st">"BTC/USDT"</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>        all_trades <span class="op">=</span> []<span class="op">;</span> seen_ids <span class="op">=</span> <span class="bu">set</span>()<span class="op">;</span> iterations <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>        last_batch_id <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> exchange_name <span class="op">==</span> <span class="st">'kraken'</span>:</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>            since <span class="op">=</span> start_ms</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>            <span class="cf">while</span> iterations <span class="op">&lt;</span> MAX_ITERATIONS:</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>                iterations <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Kraken's 'since' parameter expects milliseconds in CCXT</span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>                trades <span class="op">=</span> exchange.fetch_trades(symbol, since<span class="op">=</span>since, limit<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="kw">not</span> trades <span class="kw">or</span> trades[<span class="dv">0</span>].get(<span class="st">'id'</span>) <span class="op">==</span> last_batch_id: <span class="cf">break</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>                last_batch_id <span class="op">=</span> trades[<span class="dv">0</span>].get(<span class="st">'id'</span>)</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> t <span class="kw">in</span> trades:</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>                    ts <span class="op">=</span> get_trade_timestamp(t)</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>                    tid <span class="op">=</span> <span class="bu">str</span>(t.get(<span class="st">'id'</span>, ts))</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> start_ms <span class="op">&lt;=</span> ts <span class="op">&lt;=</span> end_ms <span class="kw">and</span> tid <span class="kw">not</span> <span class="kw">in</span> seen_ids:</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>                        seen_ids.add(tid)</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>                        all_trades.append({<span class="st">'timestamp'</span>: ts, <span class="st">'price'</span>: <span class="bu">float</span>(t[<span class="st">'price'</span>]), <span class="st">'id'</span>: tid})</span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="kw">not</span> trades: <span class="cf">break</span></span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>                last_ts <span class="op">=</span> get_trade_timestamp(trades[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> last_ts <span class="op">&gt;=</span> end_ms: <span class="cf">break</span></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>                <span class="cf">try</span>:</span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>                    <span class="co"># Kraken returns 'last' id in nanoseconds, but ccxt expects ms for 'since'</span></span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>                    raw <span class="op">=</span> exchange.last_json_response</span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>                    last_id_ns <span class="op">=</span> <span class="bu">int</span>(raw[<span class="st">'result'</span>].get(<span class="st">'last'</span>, <span class="bu">str</span>(last_ts) <span class="op">+</span> <span class="st">'000000'</span>))</span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>                    since <span class="op">=</span> last_id_ns <span class="op">//</span> <span class="dv">1000000</span>  <span class="co"># Convert ns to ms</span></span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>                <span class="cf">except</span>:</span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>                    since <span class="op">=</span> last_ts <span class="op">+</span> <span class="dv">1000</span> <span class="co"># Fallback </span></span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a>                time.sleep(exchange.rateLimit <span class="op">/</span> <span class="dv">1000</span>)</span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> exchange_name <span class="op">==</span> <span class="st">'bitstamp'</span>:</span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>            since <span class="op">=</span> start_ms</span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>            <span class="cf">while</span> iterations <span class="op">&lt;</span> MAX_ITERATIONS:</span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>                iterations <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>                <span class="co"># For Bitstamp, we request 'day' to get access to the 24h buffer</span></span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>                trades <span class="op">=</span> exchange.fetch_trades(symbol, limit<span class="op">=</span><span class="dv">1000</span>, since<span class="op">=</span>since, params<span class="op">=</span>{<span class="st">'time'</span>: <span class="st">'day'</span>})</span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="kw">not</span> trades: <span class="cf">break</span></span>
+<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Check for duplicates (if API ignores 'since' and returns latest trades repeatedly)</span></span>
+<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> trades[<span class="dv">0</span>].get(<span class="st">'id'</span>) <span class="op">==</span> last_batch_id: </span>
+<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">break</span></span>
+<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a>                last_batch_id <span class="op">=</span> trades[<span class="dv">0</span>].get(<span class="st">'id'</span>)</span>
+<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> t <span class="kw">in</span> trades:</span>
+<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>                    ts <span class="op">=</span> get_trade_timestamp(t)</span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>                    tid <span class="op">=</span> <span class="bu">str</span>(t.get(<span class="st">'id'</span>, ts))</span>
+<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> start_ms <span class="op">&lt;=</span> ts <span class="op">&lt;=</span> end_ms <span class="kw">and</span> tid <span class="kw">not</span> <span class="kw">in</span> seen_ids:</span>
+<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a>                        seen_ids.add(tid)</span>
+<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a>                        all_trades.append({<span class="st">'timestamp'</span>: ts, <span class="st">'price'</span>: <span class="bu">float</span>(t[<span class="st">'price'</span>]), <span class="st">'id'</span>: tid})</span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>                last_ts <span class="op">=</span> get_trade_timestamp(trades[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> last_ts <span class="op">&gt;=</span> end_ms: <span class="cf">break</span></span>
+<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Update since for next batch (if supported)</span></span>
+<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a>                since <span class="op">=</span> last_ts <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a>                time.sleep(exchange.rateLimit <span class="op">/</span> <span class="dv">1000</span>)</span>
+<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> exchange_name <span class="op">==</span> <span class="st">'coinbaseexchange'</span>:</span>
+<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a>            cursor <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a>            <span class="cf">while</span> iterations <span class="op">&lt;</span> MAX_ITERATIONS:</span>
+<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a>                iterations <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a>                params <span class="op">=</span> {<span class="st">'limit'</span>: <span class="dv">1000</span>}</span>
+<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> cursor: params[<span class="st">'after'</span>] <span class="op">=</span> cursor</span>
+<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a>                trades <span class="op">=</span> exchange.fetch_trades(symbol, limit<span class="op">=</span><span class="dv">1000</span>, params<span class="op">=</span>params)</span>
+<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="kw">not</span> trades <span class="kw">or</span> (<span class="bu">len</span>(trades) <span class="op">&gt;</span> <span class="dv">0</span> <span class="kw">and</span> trades[<span class="dv">0</span>].get(<span class="st">'id'</span>) <span class="op">==</span> last_batch_id):</span>
+<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">break</span></span>
+<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a>                last_batch_id <span class="op">=</span> trades[<span class="dv">0</span>].get(<span class="st">'id'</span>)</span>
+<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> iterations <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a>                    <span class="bu">print</span>(<span class="ss">f"   [DEBUG] coinbase: Batch 1 covers </span><span class="sc">{</span>get_trade_timestamp(trades[<span class="op">-</span><span class="dv">1</span>])<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>get_trade_timestamp(trades[<span class="dv">0</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> t <span class="kw">in</span> trades:</span>
+<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a>                    ts <span class="op">=</span> get_trade_timestamp(t)</span>
+<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a>                    tid <span class="op">=</span> <span class="bu">str</span>(t.get(<span class="st">'id'</span>, ts))</span>
+<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> start_ms <span class="op">&lt;=</span> ts <span class="op">&lt;=</span> end_ms <span class="kw">and</span> tid <span class="kw">not</span> <span class="kw">in</span> seen_ids:</span>
+<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a>                        seen_ids.add(tid)</span>
+<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a>                        all_trades.append({<span class="st">'timestamp'</span>: ts, <span class="st">'price'</span>: <span class="bu">float</span>(t[<span class="st">'price'</span>]), <span class="st">'id'</span>: tid})</span>
+<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a>                oldest_ts <span class="op">=</span> get_trade_timestamp(trades[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Try to get cursor from headers first (more reliable)</span></span>
+<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a>                header_cursor <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="bu">hasattr</span>(exchange, <span class="st">'last_response_headers'</span>) <span class="kw">and</span> exchange.last_response_headers:</span>
+<span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a>                     header_cursor <span class="op">=</span> (exchange.last_response_headers.get(<span class="st">'cb-after'</span>) <span class="kw">or</span> </span>
+<span id="cb12-111"><a href="#cb12-111" aria-hidden="true" tabindex="-1"></a>                                      exchange.last_response_headers.get(<span class="st">'CB-AFTER'</span>))</span>
+<span id="cb12-112"><a href="#cb12-112" aria-hidden="true" tabindex="-1"></a>                cursor <span class="op">=</span> header_cursor <span class="kw">or</span> trades[<span class="op">-</span><span class="dv">1</span>].get(<span class="st">'id'</span>)</span>
+<span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb12-114"><a href="#cb12-114" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> oldest_ts <span class="op">&lt;</span> start_ms: <span class="cf">break</span></span>
+<span id="cb12-115"><a href="#cb12-115" aria-hidden="true" tabindex="-1"></a>                time.sleep(exchange.rateLimit <span class="op">/</span> <span class="dv">1000</span>)</span>
+<span id="cb12-116"><a href="#cb12-116" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb12-117"><a href="#cb12-117" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb12-118"><a href="#cb12-118" aria-hidden="true" tabindex="-1"></a>            since <span class="op">=</span> start_ms</span>
+<span id="cb12-119"><a href="#cb12-119" aria-hidden="true" tabindex="-1"></a>            <span class="cf">while</span> iterations <span class="op">&lt;</span> MAX_ITERATIONS:</span>
+<span id="cb12-120"><a href="#cb12-120" aria-hidden="true" tabindex="-1"></a>                iterations <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a>                trades <span class="op">=</span> exchange.fetch_trades(symbol, since<span class="op">=</span>since, limit<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="kw">not</span> trades <span class="kw">or</span> trades[<span class="dv">0</span>].get(<span class="st">'id'</span>) <span class="op">==</span> last_batch_id: <span class="cf">break</span></span>
+<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a>                last_batch_id <span class="op">=</span> trades[<span class="dv">0</span>].get(<span class="st">'id'</span>)</span>
+<span id="cb12-124"><a href="#cb12-124" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> t <span class="kw">in</span> trades:</span>
+<span id="cb12-125"><a href="#cb12-125" aria-hidden="true" tabindex="-1"></a>                    ts <span class="op">=</span> get_trade_timestamp(t)</span>
+<span id="cb12-126"><a href="#cb12-126" aria-hidden="true" tabindex="-1"></a>                    tid <span class="op">=</span> <span class="bu">str</span>(t.get(<span class="st">'id'</span>, ts))</span>
+<span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> start_ms <span class="op">&lt;=</span> ts <span class="op">&lt;=</span> end_ms <span class="kw">and</span> tid <span class="kw">not</span> <span class="kw">in</span> seen_ids:</span>
+<span id="cb12-128"><a href="#cb12-128" aria-hidden="true" tabindex="-1"></a>                        seen_ids.add(tid)</span>
+<span id="cb12-129"><a href="#cb12-129" aria-hidden="true" tabindex="-1"></a>                        all_trades.append({<span class="st">'timestamp'</span>: ts, <span class="st">'price'</span>: <span class="bu">float</span>(t[<span class="st">'price'</span>]), <span class="st">'id'</span>: tid})</span>
+<span id="cb12-130"><a href="#cb12-130" aria-hidden="true" tabindex="-1"></a>                last_ts <span class="op">=</span> get_trade_timestamp(trades[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb12-131"><a href="#cb12-131" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> last_ts <span class="op">&gt;=</span> end_ms: <span class="cf">break</span></span>
+<span id="cb12-132"><a href="#cb12-132" aria-hidden="true" tabindex="-1"></a>                since <span class="op">=</span> last_ts <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb12-133"><a href="#cb12-133" aria-hidden="true" tabindex="-1"></a>                time.sleep(exchange.rateLimit <span class="op">/</span> <span class="dv">1000</span>)</span>
+<span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"   + </span><span class="sc">{</span>exchange_name<span class="sc">:&lt;10}</span><span class="ss">: Fetched </span><span class="sc">{</span><span class="bu">len</span>(all_trades)<span class="sc">}</span><span class="ss"> trades (</span><span class="sc">{</span>iterations<span class="sc">}</span><span class="ss"> API calls)."</span>)</span>
+<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> all_trades: <span class="cf">return</span> pd.DataFrame(columns<span class="op">=</span>[<span class="st">'timestamp'</span>, <span class="st">'price'</span>, <span class="st">'id'</span>])</span>
+<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pd.DataFrame(all_trades).drop_duplicates(subset<span class="op">=</span>[<span class="st">'id'</span>]).sort_values(<span class="st">'timestamp'</span>)</span>
+<span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"   [ERROR] </span><span class="sc">{</span>exchange_name<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pd.DataFrame(columns<span class="op">=</span>[<span class="st">'timestamp'</span>, <span class="st">'price'</span>, <span class="st">'id'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="790838a1" class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_market_data(dfs: Dict[<span class="bu">str</span>, pd.DataFrame], start_ms: <span class="bu">int</span>, end_ms: <span class="bu">int</span>):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Process raw trade data into time buckets and calculate favorable outcomes.</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Uses the specified historical time window.</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">    IMPORTANT: Some exchanges only provide recent historical data (up to 24 hours). </span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">    - Partially missing data is handled by forward/backward filling.</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">    - Completely missing exchanges use a constant fallback price (median of available prices).</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Validate we have data from exchanges</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    available_exchanges <span class="op">=</span> [ex <span class="cf">for</span> ex, df <span class="kw">in</span> dfs.items() <span class="cf">if</span> <span class="kw">not</span> df.empty]</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    missing_exchanges <span class="op">=</span> [ex <span class="cf">for</span> ex, df <span class="kw">in</span> dfs.items() <span class="cf">if</span> df.empty]</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> missing_exchanges:</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        <span class="im">import</span> time</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        current_time_ms <span class="op">=</span> <span class="bu">int</span>(time.time() <span class="op">*</span> <span class="dv">1000</span>)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>        hours_since_start <span class="op">=</span> (current_time_ms <span class="op">-</span> start_ms) <span class="op">/</span> <span class="dv">3600000</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"[WARNING] No data from: </span><span class="sc">{</span><span class="st">', '</span><span class="sc">.</span>join(missing_exchanges)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> hours_since_start <span class="op">&gt;</span> <span class="dv">24</span>:</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"   NOTE: Historical window starts </span><span class="sc">{</span>hours_since_start<span class="sc">:.1f}</span><span class="ss"> hours ago."</span>)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"   Some exchanges (e.g., Bitstamp) only provide up to 24h of historical data."</span>)</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> available_exchanges:</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"[CRITICAL] No data from ANY exchange! Cannot proceed."</span>)</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.array([[]], dtype<span class="op">=</span>np.float32)</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(available_exchanges) <span class="op">&lt;</span> <span class="bu">len</span>(dfs):</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"[INFO] Proceeding with data from: </span><span class="sc">{</span><span class="st">', '</span><span class="sc">.</span>join(available_exchanges)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"   Missing exchange data will use a constant fallback price (median of available prices)."</span>)</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Use the historical window boundaries</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>    t_start <span class="op">=</span> start_ms</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>    t_end <span class="op">=</span> end_ms</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>    buckets <span class="op">=</span> np.arange(t_start, t_end, TIME_BUCKET_MS)</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"[DATA] Processing </span><span class="sc">{</span><span class="bu">len</span>(buckets)<span class="sc">}</span><span class="ss"> time buckets (</span><span class="sc">{</span>t_start<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>t_end<span class="sc">}</span><span class="ss">)"</span>)</span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ex, df <span class="kw">in</span> dfs.items():</span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> df.empty:</span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>            actual_start <span class="op">=</span> df[<span class="st">'timestamp'</span>].<span class="bu">min</span>()</span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>            actual_end <span class="op">=</span> df[<span class="st">'timestamp'</span>].<span class="bu">max</span>()</span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>            coverage_sec <span class="op">=</span> (actual_end <span class="op">-</span> actual_start) <span class="op">/</span> <span class="dv">1000</span></span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>            target_sec <span class="op">=</span> (end_ms <span class="op">-</span> start_ms) <span class="op">/</span> <span class="dv">1000</span></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"   [COVERAGE] </span><span class="sc">{</span>ex<span class="sc">:&lt;10}</span><span class="ss">: </span><span class="sc">{</span>coverage_sec<span class="sc">:&gt;7.1f}</span><span class="ss">s of </span><span class="sc">{</span>target_sec<span class="sc">:.0f}</span><span class="ss">s (</span><span class="sc">{</span>coverage_sec<span class="op">/</span>target_sec<span class="op">*</span><span class="dv">100</span><span class="sc">:&gt;5.1f}</span><span class="ss">%)"</span>)</span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"   [COVERAGE] </span><span class="sc">{</span>ex<span class="sc">:&lt;10}</span><span class="ss">: 0.0s (0.0%) - NO DATA"</span>)</span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>    master <span class="op">=</span> pd.DataFrame({<span class="st">'bucket'</span>: np.arange(<span class="bu">len</span>(buckets)), <span class="st">'ts'</span>: buckets})</span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>    <span class="co"># For missing exchanges, we'll use a fallback price from available data</span></span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>    all_prices <span class="op">=</span> []</span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ex <span class="kw">in</span> available_exchanges:</span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>        all_prices.extend(dfs[ex][<span class="st">'price'</span>].tolist())</span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>    fallback_price <span class="op">=</span> np.median(all_prices) <span class="cf">if</span> all_prices <span class="cf">else</span> <span class="dv">100000</span>  <span class="co"># BTC price fallback</span></span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, (ex, df) <span class="kw">in</span> <span class="bu">enumerate</span>(dfs.items()):</span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> df.empty:</span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>            <span class="co"># No data for this exchange - use fallback price (will lose to other exchanges)</span></span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>            master[<span class="ss">f'v</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">_p'</span>] <span class="op">=</span> fallback_price</span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"   </span><span class="sc">{</span>ex<span class="sc">}</span><span class="ss">: Using fallback price $</span><span class="sc">{</span>fallback_price<span class="sc">:.2f}</span><span class="ss"> (no data available)"</span>)</span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a>            ex_d <span class="op">=</span> df[(df[<span class="st">'timestamp'</span>] <span class="op">&gt;=</span> t_start) <span class="op">&amp;</span> (df[<span class="st">'timestamp'</span>] <span class="op">&lt;=</span> t_end)].copy()</span>
+<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> ex_d.empty:</span>
+<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>                master[<span class="ss">f'v</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">_p'</span>] <span class="op">=</span> fallback_price</span>
+<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="ss">f"   </span><span class="sc">{</span>ex<span class="sc">}</span><span class="ss">: No trades in window, using fallback price $</span><span class="sc">{</span>fallback_price<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a>                ex_d[<span class="st">'b_idx'</span>] <span class="op">=</span> ((ex_d[<span class="st">'timestamp'</span>] <span class="op">-</span> t_start) <span class="op">//</span> TIME_BUCKET_MS).astype(<span class="bu">int</span>)</span>
+<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a>                ex_b <span class="op">=</span> ex_d.groupby(<span class="st">'b_idx'</span>).agg({<span class="st">'price'</span>: <span class="st">'last'</span>}).rename(columns<span class="op">=</span>{<span class="st">'price'</span>: <span class="ss">f'v</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">_p'</span>})</span>
+<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a>                master <span class="op">=</span> master.join(ex_b, on<span class="op">=</span><span class="st">'bucket'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a>                master[<span class="ss">f'v</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">_p'</span>] <span class="op">=</span> master[<span class="ss">f'v</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">_p'</span>].ffill().bfill()</span>
+<span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="ss">f"   </span><span class="sc">{</span>ex<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>(ex_d)<span class="sc">}</span><span class="ss"> trades mapped to buckets"</span>)</span>
+<span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb13-73"><a href="#cb13-73" aria-hidden="true" tabindex="-1"></a>    prices <span class="op">=</span> [<span class="ss">f'v</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">_p'</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(EXCHANGES))]</span>
+<span id="cb13-74"><a href="#cb13-74" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-75"><a href="#cb13-75" aria-hidden="true" tabindex="-1"></a>    <span class="co"># STRICT Random Tie-Breaking (No data modification)</span></span>
+<span id="cb13-76"><a href="#cb13-76" aria-hidden="true" tabindex="-1"></a>    values <span class="op">=</span> master[prices].values</span>
+<span id="cb13-77"><a href="#cb13-77" aria-hidden="true" tabindex="-1"></a>    max_vals <span class="op">=</span> values.<span class="bu">max</span>(axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-78"><a href="#cb13-78" aria-hidden="true" tabindex="-1"></a>    is_max <span class="op">=</span> (values <span class="op">==</span> max_vals)</span>
+<span id="cb13-79"><a href="#cb13-79" aria-hidden="true" tabindex="-1"></a>    best_venue <span class="op">=</span> np.array([np.random.choice(np.flatnonzero(row)) <span class="cf">for</span> row <span class="kw">in</span> is_max])</span>
+<span id="cb13-80"><a href="#cb13-80" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-81"><a href="#cb13-81" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(EXCHANGES)): </span>
+<span id="cb13-82"><a href="#cb13-82" aria-hidden="true" tabindex="-1"></a>        master[<span class="ss">f'v</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">_r'</span>] <span class="op">=</span> np.where(best_venue <span class="op">==</span> i, <span class="fl">1.0</span>, <span class="op">-</span><span class="fl">1.0</span>)</span>
+<span id="cb13-83"><a href="#cb13-83" aria-hidden="true" tabindex="-1"></a>        master[<span class="ss">f'v</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">_s'</span>] <span class="op">=</span> master[<span class="ss">f'v</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">_r'</span>]</span>
+<span id="cb13-84"><a href="#cb13-84" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-85"><a href="#cb13-85" aria-hidden="true" tabindex="-1"></a>    cols_r <span class="op">=</span> [<span class="ss">f'v</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">_r'</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(EXCHANGES))]</span>
+<span id="cb13-86"><a href="#cb13-86" aria-hidden="true" tabindex="-1"></a>    cols_s <span class="op">=</span> [<span class="ss">f'v</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">_s'</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(EXCHANGES))]</span>
+<span id="cb13-87"><a href="#cb13-87" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> master[cols_r <span class="op">+</span> cols_s].values.astype(np.float32)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="thrml-integration" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="thrml-integration"><span class="header-section-number">2.3</span> 4. THRML Integration</h2>
+<div id="c7b51744" class="cell" data-execution_count="12">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> thrml_select_conditional(state, key, cv, co, infra, config):</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Leverage Ising model correlations to route orders based on observed context venue."""</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_moments(v_idx):</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Worker function to perform inference conditioned on venue v_idx."""</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> IsingEBM(infra[<span class="st">'nodes'</span>], infra[<span class="st">'edges'</span>], state.biases, state.weights, jnp.array(config.beta))</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        v_infra <span class="op">=</span> infra[<span class="st">'list'</span>][v_idx]</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        prog <span class="op">=</span> IsingSamplingProgram(model, v_infra[<span class="st">'free'</span>], clamped_blocks<span class="op">=</span>[v_infra[<span class="st">'clamped'</span>]])</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        k1, k2 <span class="op">=</span> random.split(random.fold_in(key, v_idx))</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        clamped_state <span class="op">=</span> [jnp.array([(co <span class="op">&gt;</span> <span class="dv">0</span>).astype(jnp.bool_)])]</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        init <span class="op">=</span> hinton_init(k1, model, v_infra[<span class="st">'free'</span>], ())</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        samples <span class="op">=</span> sample_states(k2, prog, infra[<span class="st">'sched'</span>], init, clamped_state, infra[<span class="st">'full_block'</span>])[<span class="dv">0</span>]</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        spins <span class="op">=</span> (<span class="dv">2</span> <span class="op">*</span> samples.astype(jnp.float32) <span class="op">-</span> <span class="dv">1</span>).reshape(samples.shape[<span class="dv">0</span>], <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        probs <span class="op">=</span> (jnp.mean(spins, axis<span class="op">=</span><span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span>) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> probs</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    branches <span class="op">=</span> [<span class="kw">lambda</span> i<span class="op">=</span>i: get_moments(i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(infra[<span class="st">'list'</span>]))]</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    probs <span class="op">=</span> lax.switch(cv, branches)</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    routing_mask <span class="op">=</span> jnp.zeros(config.n_venues).at[cv].<span class="bu">set</span>(<span class="op">-</span><span class="fl">1e9</span>)</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jnp.argmax(probs <span class="op">+</span> routing_mask), probs</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> thrml_sample_joint(state, key, infra, config):</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Perform UNCLAMPED sampling for unbiased weight updates."""</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> IsingEBM(infra[<span class="st">'nodes'</span>], infra[<span class="st">'edges'</span>], state.biases, state.weights, jnp.array(config.beta))</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    prog <span class="op">=</span> IsingSamplingProgram(model, infra[<span class="st">'joint'</span>][<span class="st">'free'</span>], clamped_blocks<span class="op">=</span>[])</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    k1, k2 <span class="op">=</span> random.split(key)</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    init <span class="op">=</span> hinton_init(k1, model, infra[<span class="st">'joint'</span>][<span class="st">'free'</span>], ())</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>    samples <span class="op">=</span> sample_states(k2, prog, infra[<span class="st">'sched'</span>], init, [], infra[<span class="st">'full_block'</span>])[<span class="dv">0</span>]</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>    spins <span class="op">=</span> (<span class="dv">2</span> <span class="op">*</span> samples.astype(jnp.float32) <span class="op">-</span> <span class="dv">1</span>).reshape(samples.shape[<span class="dv">0</span>], <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>    node_moms <span class="op">=</span> jnp.mean(spins, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>    edge_moms <span class="op">=</span> ((spins.T <span class="op">@</span> spins) <span class="op">/</span> config.n_samples)[jnp.triu_indices(state.biases.shape[<span class="dv">0</span>], <span class="dv">1</span>)]</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> node_moms, edge_moms</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="experiment-execution" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="experiment-execution"><span class="header-section-number">2.4</span> 5. Experiment Execution</h2>
+<div id="3d96a49e" class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ceg_update(state, cidx, venue, outcome, discount_factor):</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Update context-specific estimates for the selected venue only.</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Only the (context, selected_venue) pair is updated.</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> state.successes <span class="op">*</span> discount_factor<span class="op">;</span> c <span class="op">=</span> state.counts <span class="op">*</span> discount_factor</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> AgentState_CEG(s.at[cidx, venue].add(jnp.where(outcome <span class="op">&gt;</span> <span class="dv">0</span>, <span class="fl">1.0</span>, <span class="fl">0.0</span>)), c.at[cidx, venue].add(<span class="fl">1.0</span>))</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cts_update(state, cidx, venue, outcome, discount_factor):</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co">    Update context-specific posteriors for the selected venue only.</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> state.alphas <span class="op">*</span> discount_factor<span class="op">;</span> b <span class="op">=</span> state.betas <span class="op">*</span> discount_factor</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> AgentState_CTS(a.at[cidx, venue].add(jnp.where(outcome <span class="op">&gt;</span> <span class="dv">0</span>, <span class="fl">1.0</span>, <span class="fl">0.0</span>)), b.at[cidx, venue].add(jnp.where(outcome <span class="op">&gt;</span> <span class="dv">0</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>)))</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_one_seed(seed, config, data, infra):</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> config.n_venues<span class="op">;</span> act_steps <span class="op">=</span> data.shape[<span class="dv">0</span>]</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> step(carry, step_idx):</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>        rng, s_ceg, s_cts, s_thrml <span class="op">=</span> carry</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Data now contains [Rewards (N) | States (N)]</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>        step_data <span class="op">=</span> data[step_idx]</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>        out_rewards <span class="op">=</span> step_data[:n] <span class="co"># For Regret &amp; Competitive Baselines</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Architectural note:</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># We split the data into 'out_rewards' (for calculating Regret) and 'out_states'</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># (for the agent's Context/Learning). In this specific notebook, these values are</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>        <span class="co"># numerically identical. However, we keep them distinct to maintain architectural </span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># generality for future experiments where Market State (e.g., Volatility) </span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>        <span class="co"># might differ from Market Reward (e.g., Best Price).</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>        out_states <span class="op">=</span> step_data[n:]  <span class="co"># For THRML Context &amp; Learning</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>        rng, k_c, k_a, k_u <span class="op">=</span> random.split(rng, <span class="dv">4</span>)</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>        is_fixed <span class="op">=</span> (config.context_mode <span class="op">==</span> <span class="st">"fixed"</span>)</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>        cv <span class="op">=</span> lax.cond(is_fixed, <span class="kw">lambda</span>: jnp.array(<span class="dv">0</span>, dtype<span class="op">=</span>jnp.int32), <span class="kw">lambda</span>: random.randint(k_c, (), <span class="dv">0</span>, n))</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>        <span class="co"># THRML Context: Uses 'State' (Correlated Market Info), not 'Reward' (Outcome)</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>        co <span class="op">=</span> out_states[cv]<span class="op">;</span> cidx <span class="op">=</span> get_context_index(cv, co)</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>        routing_mask <span class="op">=</span> jnp.zeros(n).at[cv].<span class="bu">set</span>(<span class="op">-</span><span class="fl">1e9</span>)</span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>        oracle_best <span class="op">=</span> jnp.argmax(out_rewards <span class="op">+</span> routing_mask)<span class="op">;</span> oracle_rew <span class="op">=</span> out_rewards[oracle_best]</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>        k_ceg, k_cts, k_thrml <span class="op">=</span> random.split(k_a, <span class="dv">3</span>)</span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>        a_ceg <span class="op">=</span> ceg_select(s_ceg, k_ceg, cidx, routing_mask)</span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>        a_cts <span class="op">=</span> cts_select(s_cts, k_cts, cidx, routing_mask)</span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Selection: Clamped (Conditional) on State</span></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>        a_thrml, _ <span class="op">=</span> thrml_select_conditional(s_thrml, k_thrml, cv, co, infra, config)</span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Update prep: UNCLAMPED (Joint) to avoid gradient bias</span></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>        model_node_moms, model_edge_moms <span class="op">=</span> thrml_sample_joint(s_thrml, k_u, infra, config)</span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>        regret <span class="op">=</span> oracle_rew <span class="op">-</span> jnp.array([out_rewards[a_ceg], out_rewards[a_cts], out_rewards[a_thrml]])</span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>        n_ceg <span class="op">=</span> ceg_update(s_ceg, cidx, a_ceg, out_rewards[a_ceg], config.discount_factor)</span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>        n_cts <span class="op">=</span> cts_update(s_cts, cidx, a_cts, out_rewards[a_cts], config.discount_factor)</span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>        <span class="co"># THRML Update: Learns the DISTRIBUTION of STATES (Correlations)</span></span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>        ops_o <span class="op">=</span> jnp.zeros(n).at[cv].<span class="bu">set</span>(co).at[a_thrml].<span class="bu">set</span>(out_states[a_thrml])</span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a>        ops_m <span class="op">=</span> jnp.zeros(n).at[cv].<span class="bu">set</span>(<span class="fl">1.0</span>).at[a_thrml].<span class="bu">set</span>(<span class="fl">1.0</span>)</span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>        n_thrml <span class="op">=</span> thrml_update(s_thrml, ops_o, ops_m, </span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a>                               model_node_moms<span class="op">=</span>model_node_moms, </span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>                               model_edge_moms<span class="op">=</span>model_edge_moms, </span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>                               discount_factor<span class="op">=</span>config.discount_factor, </span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>                               learning_rate<span class="op">=</span>config.learning_rate, </span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a>                               beta<span class="op">=</span>config.beta, </span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>                               propagation_damping<span class="op">=</span>config.propagation_damping,</span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>                               coupling_decay<span class="op">=</span>config.coupling_decay, </span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a>                               damp_coupling<span class="op">=</span>config.damp_coupling)</span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (rng, n_ceg, n_cts, n_thrml), regret</span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a>    init_carry <span class="op">=</span> (seed, ceg_init(n), cts_init(n), thrml_init(n, window_size<span class="op">=</span>config.window_size))</span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a>    _, regrets <span class="op">=</span> lax.scan(step, init_carry, jnp.arange(act_steps))</span>
+<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a>    cum_regrets <span class="op">=</span> jnp.cumsum(regrets, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">"Contextual ε-Greedy"</span>: cum_regrets[:, <span class="dv">0</span>], <span class="st">"Contextual Thompson Sampling"</span>: cum_regrets[:, <span class="dv">1</span>], <span class="st">"THRML"</span>: cum_regrets[:, <span class="dv">2</span>]}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="a289d69f" class="cell" data-execution_count="14">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> execute_experiment():</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"[START] Fetching Historical Data..."</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"   Time window: </span><span class="sc">{</span>HIST_START_MS<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>HIST_END_MS<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fetch historical trades from each exchange</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    dfs <span class="op">=</span> {ex: sync_trades_hist(ex, HIST_START_MS, HIST_END_MS) <span class="cf">for</span> ex <span class="kw">in</span> EXCHANGES}</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Process the historical data</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    raw_data <span class="op">=</span> process_market_data(dfs, HIST_START_MS, HIST_END_MS)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> raw_data.size <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"[ERROR] No data retrieved. Check your timestamps and try again."</span>)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> jnp.array(raw_data)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"[DATA] Dataset Final Size: </span><span class="sc">{</span>data<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> bucketted seconds."</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    config <span class="op">=</span> ExperimentConfig(n_steps<span class="op">=</span>data.shape[<span class="dv">0</span>])<span class="op">;</span> infra <span class="op">=</span> build_thrml_infra(config.n_venues, config)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    seeds <span class="op">=</span> random.split(random.key(<span class="dv">42</span>), config.n_seeds)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    labels <span class="op">=</span> [<span class="st">"Contextual ε-Greedy"</span>, <span class="st">"Contextual Thompson Sampling"</span>, <span class="st">"THRML"</span>]<span class="op">;</span> summary <span class="op">=</span> {}</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># BATCHING SETTINGS TO PREVENT CUDA OOM</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    BATCH_SIZE <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    jax.clear_caches()</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    n_total_seeds <span class="op">=</span> config.n_seeds</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> mode_name <span class="kw">in</span> [<span class="st">"fixed"</span>, <span class="st">"random"</span>]:</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>        conf <span class="op">=</span> config._replace(context_mode<span class="op">=</span>mode_name)</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"[RUN] Running </span><span class="sc">{</span>mode_name<span class="sc">.</span>upper()<span class="sc">}</span><span class="ss"> Context (Batched execution to prevent OOM)... "</span>)</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Initialize storage for batched results</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>        all_res_list <span class="op">=</span> []</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Compile runner inside jit for a single batch to keep graph smaller</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>        runner <span class="op">=</span> jit(vmap(<span class="kw">lambda</span> s: run_one_seed(s, conf, data, infra)))</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>        start_time <span class="op">=</span> time.time()</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, n_total_seeds, BATCH_SIZE):</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>            batch_seeds <span class="op">=</span> seeds[i : i <span class="op">+</span> BATCH_SIZE]</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"   - Processing seeds </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> to </span><span class="sc">{</span>i <span class="op">+</span> <span class="bu">len</span>(batch_seeds)<span class="sc">}</span><span class="ss">..."</span>, end<span class="op">=</span><span class="st">""</span>)</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>            batch_start <span class="op">=</span> time.time()</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>            res <span class="op">=</span> runner(batch_seeds)</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Ensure computation for this batch is done and clear from GPU staging</span></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>            res <span class="op">=</span> jax.tree_util.tree_map(<span class="kw">lambda</span> x: x.block_until_ready(), res)</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>            all_res_list.append(res)</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f" [</span><span class="sc">{</span>time<span class="sc">.</span>time()<span class="op">-</span>batch_start<span class="sc">:.1f}</span><span class="ss">s]"</span>)</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Combine results across batches</span></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>        batch_res <span class="op">=</span> {}</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> lbl <span class="kw">in</span> labels:</span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>            batch_res[lbl] <span class="op">=</span> jnp.concatenate([r[lbl] <span class="cf">for</span> r <span class="kw">in</span> all_res_list], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"   [DONE] Total Context mode completed in </span><span class="sc">{</span>time<span class="sc">.</span>time()<span class="op">-</span>start_time<span class="sc">:.1f}</span><span class="ss">s"</span>)</span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>        summary[mode_name] <span class="op">=</span> jnp.array([jnp.mean(batch_res[lbl][:, <span class="op">-</span><span class="dv">1</span>]) <span class="cf">for</span> lbl <span class="kw">in</span> labels])</span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>        plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, lbl <span class="kw">in</span> <span class="bu">enumerate</span>(labels):</span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>            plt.plot(jnp.mean(batch_res[lbl], axis<span class="op">=</span><span class="dv">0</span>), label<span class="op">=</span>lbl)</span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a>        plt.title(<span class="ss">f"Cumulative Regret: </span><span class="sc">{</span>mode_name<span class="sc">}</span><span class="ss"> Context"</span>)<span class="op">;</span> plt.legend()<span class="op">;</span> plt.grid(<span class="va">True</span>)<span class="op">;</span> plt.show()</span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">""</span> <span class="op">+</span> <span class="st">"="</span><span class="op">*</span><span class="dv">45</span>)</span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span> <span class="st">'MODE'</span><span class="sc">:&lt;10}</span><span class="ss"> | </span><span class="sc">{</span> <span class="st">'Contextual ε-Greedy'</span><span class="sc">:&lt;10}</span><span class="ss"> | </span><span class="sc">{</span><span class="st">'Contextual Thompson Sampling'</span><span class="sc">:&lt;10}</span><span class="ss"> | </span><span class="sc">{</span><span class="st">'THRML'</span><span class="sc">:&lt;10}</span><span class="ss">"</span>)</span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> m, v <span class="kw">in</span> summary.items():</span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>m<span class="sc">:&lt;10}</span><span class="ss"> | </span><span class="sc">{</span><span class="bu">float</span>(v[<span class="dv">0</span>])<span class="sc">:&lt;10.2f}</span><span class="ss"> | </span><span class="sc">{</span><span class="bu">float</span>(v[<span class="dv">1</span>])<span class="sc">:&lt;10.2f}</span><span class="ss"> | </span><span class="sc">{</span><span class="bu">float</span>(v[<span class="dv">2</span>])<span class="sc">:&lt;10.2f}</span><span class="ss">"</span>)</span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">45</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="158c036b" class="cell" data-execution_count="15">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the experiment</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>execute_experiment()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[START] Fetching Historical Data...
+   Time window: 1770037944132 to 1770047944132
+   [DEBUG] coinbase: Batch 1 covers 1770048246524 to 1770048217876
+   + coinbaseexchange: Fetched 209656 trades (220 API calls).
+   + kraken    : Fetched 14892 trades (15 API calls).
+   + bitstamp  : Fetched 40766 trades (41 API calls).
+[DATA] Processing 10000 time buckets (1770037944132 to 1770047944132)
+   [COVERAGE] coinbaseexchange:  9998.7s of 10000s (100.0%)
+   [COVERAGE] kraken    :  9993.6s of 10000s ( 99.9%)
+   [COVERAGE] bitstamp  :  9996.0s of 10000s (100.0%)
+   coinbaseexchange: 209656 trades mapped to buckets
+   kraken: 14892 trades mapped to buckets
+   bitstamp: 40766 trades mapped to buckets
+[DATA] Dataset Final Size: 10000 bucketted seconds.
+[RUN] Running FIXED Context (Batched execution to prevent OOM)... 
+   - Processing seeds 0 to 50... [138.7s]
+   - Processing seeds 50 to 100... [121.7s]
+   - Processing seeds 100 to 150... [121.5s]
+   - Processing seeds 150 to 200... [121.6s]
+   [DONE] Total Context mode completed in 503.6s</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="real_data_files/figure-html/cell-16-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[RUN] Running RANDOM Context (Batched execution to prevent OOM)... 
+   - Processing seeds 0 to 50... [242.8s]
+   - Processing seeds 50 to 100... [216.4s]
+   - Processing seeds 100 to 150... [216.5s]
+   - Processing seeds 150 to 200... [216.4s]
+   [DONE] Total Context mode completed in 892.1s</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="real_data_files/figure-html/cell-16-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>=============================================
+MODE       | Contextual ε-Greedy | Contextual Thompson Sampling | THRML     
+fixed      | 4823.86    | 4532.97    | 3914.27   
+random     | 5141.93    | 5000.64    | 3775.45   
+=============================================</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

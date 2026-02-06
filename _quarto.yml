@@ -1,0 +1,46 @@
+project:
+  type: website
+  output-dir: docs
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: false
+    number-sections: true
+    html-math-method: mathjax
+    code-fold: true
+    code-summary: "Show the code"
+    code-tools: false
+    title-block-banner: true
+
+website:
+  title: "Conditional Inference: THRML & Order Routing"
+  sidebar:
+    style: "docked"
+    search: false
+    contents:
+      - section: "Article"
+        contents:
+          - text: "1. Overview"
+            href: index.qmd#overview
+          - text: "2. Introduction"
+            href: index.qmd#introduction
+          - text: "3. Literature Review"
+            href: index.qmd#background
+          - text: "4. Problem Formulation"
+            href: index.qmd#formulation
+          - text: "5. Methodology"
+            href: index.qmd#methodology
+          - text: "6. Results"
+            href: index.qmd#experiments
+          - text: "7. Conclusion"
+            href: index.qmd#conclusion
+          - text: "8. References"
+            href: index.qmd#references
+      - section: "Experiments"
+        contents:
+          - text: "SYNTHETIC DATA<br>EXPERIMENT"
+            href: experiments/synthetic_data.ipynb
+          - text: "REAL DATA<br>EXPERIMENT"
+            href: experiments/real_data.ipynb
