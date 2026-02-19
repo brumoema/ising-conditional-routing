@@ -1,7 +1,7 @@
 ---
 title: "[Conditional Inference for Financial Order Routing Using Energy-Based Models](index.qmd)"
 author: "Bruna Moema"
-date: "February 6, 2026"
+date: "February 19, 2026"
 title-block-banner: true
 ---
 
@@ -132,9 +132,9 @@ Two baseline agents are implemented for comparison. Since the environment consis
 ### THRML Agent: Conditional Ising Inference {#ising-inference}
 The THRML agent models the venue system as an Ising EBM and uses clamped sampling for conditional inference.
 
-**Selection via clamping**: Given context venues $\mathcal{C}$ with outcomes $\mathbf{o}_{\mathcal{C}}$, the agent constructs an `IsingEBM`, clamps the context nodes to their observed states, and uses THRML's `sample_states` to draw samples from $P(X_{\text{free}} | X_{\mathcal{C}} = \mathbf{o}_{\mathcal{C}})$. The update rule also incorporates a mean-field signal propagation mechanism (propagation_damping=0.3) that accelerates belief diffusion across the graph. This mechanism helps propagate information from clamped nodes to free nodes via the coupling matrix $J$ before sampling: $\text{bias}_{new} \leftarrow \text{bias}_{old} + \eta \beta (J \cdot \mathbf{x}_{obs}) (1 - m_{obs})$.
+**Selection via clamping**: Given context venues $\mathcal{C}$ with outcomes $\mathbf{o}_{\mathcal{C}}$, the agent constructs an `IsingEBM`, clamps the context nodes to their observed states, and uses THRML's `sample_states` to draw samples from $P(X_{\text{free}} | X_{\mathcal{C}} = \mathbf{o}_{\mathcal{C}})$. The update rule also incorporates a mean-field signal propagation mechanism (propagation_damping=0.3) that accelerates belief diffusion across the graph. The full bias update at each step is: $\mathbf{b}_{new} \leftarrow \gamma \, \mathbf{b}_{old} + \eta \beta (\mathbf{x}_{obs} - \hat{\mathbf{x}}_{obs}) + \delta \cdot \eta \beta (J \cdot \mathbf{x}_{obs})(1 - m_{obs})$, where $\gamma$ is the discount factor, $\eta$ is the learning rate, $\mathbf{x}_{obs}$ and $\hat{\mathbf{x}}_{obs}$ are the data and model node moments at observed positions (the contrastive divergence term), and $\delta$ is the propagation damping coefficient that propagates information from clamped nodes to free nodes via the coupling matrix $J$.
 
-**Implementation optimization**: To maintain high throughput, the implementation utilizes "Static Infrastructure Pre-building" (`build_thrml_infra`). For general cases (like the synthetic experiments), the agent uses **dynamic node permutation** to map context nodes to the model's first $K$ indices. In the specific case of real-world experiments (N=3), the implementation leverages an optimized branching strategy (using `lax.switch`) to select strictly pre-compiled static graphs. Both methods satisfy the library's static block structure without requiring expensive graph reconstruction inside the performance loop.
+**Implementation optimization**: To maintain high throughput, the implementation utilizes "Static Infrastructure Pre-building" (`build_thrml_infra`). For general cases (like the synthetic experiments), the agent uses **dynamic node permutation** to map context nodes to the model's first $K$ indices. In the specific case of real-world experiments (N=3), the implementation leverages an optimized branching strategy (using `lax.switch`) to select among pre-computed graph topologies and schedules. While the current implementation re-binds the program wrapper per-step to pass updated model parameters into the sampling loop, it avoids the overhead of re-generating the underlying graph connectivity and block schedules.
 
 ---
 
@@ -192,6 +192,18 @@ The synthetic experiments serve as a theoretical validation to confirm that the 
     This proves that the thermodynamic agent's ``coupling_decay`` and ``discount_factor`` mechanisms allow it to shed outdated beliefs and adapt to new market regimes much faster than the Beta distributions of Thompson Sampling.
 
 4.  **Robustness in Random Contexts**: Even in "IID / Random", where no correlations exist to exploit, THRML outperforms Thompson Sampling (0.96 vs 12.84), suggesting its internal regularization prevents it from hallucinating correlations ("overfitting") while still optimizing for the immediate available rewards more efficiently than the baseline.
+
+#### Generative Verification: Parameter Recovery
+
+Beyond minimizing regret, a key theoretical claim is that the THRML agent approximates the underlying energy landscape of the system. To verify this, a **Generative Proof** experiment was performed where a fresh THRML agent (no carryover from routing) was trained on the full, unmasked raw Ising outcomes to reconstruct the ground-truth Hamiltonian. This experiment used a **static configuration** (discount factor $\gamma=1.0$, coupling decay $\lambda=1.0$) to isolate the agent's capacity for stationary parameter recovery. The Regime Shift scenario is intentionally excluded, as its non-stationarity precludes a meaningful steady-state ground truth comparison.
+
+The results[^7] demonstrate that the agent recovers the system's structure, as measured by the Mean Absolute Error (MAE) between sampled and ground-truth distributions (mean ± SD across 64 seeds, pass threshold: MAE $< 0.08$):
+
+1. **IID Venues** (GT biases: $[+0.5,\ 0.0,\ -0.5]$; GT coupling: $0.0$): The agent accurately recovered the node biases (learned: $[+0.498,\ -0.003,\ -0.530]$) and learned near-zero coupling weights ($[0.027,\ 0.011,\ 0.008]$), consistent with the ground truth of no pairwise correlations. Evaluation passed both quality thresholds marginal MAE: $0.0517 \pm 0.0227$ (untrained baseline: $0.1529$); correlation MAE: $0.0662 \pm 0.0299$ (untrained baseline: $0.1031$). The small residual spurious correlations are characteristic of energy-based models fitting stochastic noise in finite datasets.
+
+2. **Correlated Venues** (GT biases: $[+0.5,\ 0.0,\ -0.5]$; GT coupling: $0.4$): The agent reconstructed both the heterogeneous biases (learned: $[+0.487,\ -0.016,\ -0.540]$) and the positive coupling structure (learned weights: $[0.419,\ 0.412,\ 0.418]$), closely tracking the ground truth coupling of $0.4$ across all pairs. Evaluation passed both quality thresholds: marginal MAE: $0.0746 \pm 0.0527$ (untrained baseline: $0.0918$); correlation MAE: $0.0592 \pm 0.0322$ (untrained baseline: $0.4231$). Pairwise correlations are recovered with high fidelity, confirming that THRML's contrastive divergence updates successfully identify the interaction structure of the market.
+
+![Generative Proof: Raw Distribution Learning (No Routing): Comparison of learned vs. ground truth marginals and pairwise correlations for IID and Correlated venue scenarios.](experiments/images/generative_proof_results.png)
 
 ### Real-World Data Experiments {#real-world}
 
@@ -260,3 +272,5 @@ The results are conclusive:
 4. **Ising Model**: Ising, E. (1925). "Beitrag zur Theorie des Ferromagnetismus." *Zeitschrift für Physik*, 31(1), 253-258.
 5. **Reinforcement Learning**: Sutton, R. S., & Barto, A. G. (2018). *Reinforcement Learning: An Introduction*. MIT Press. (For $\epsilon$-Greedy and general bandit formulation).
 6. **Contextual Thompson Sampling**: Agrawal, S., & Goyal, N. (2013). "Thompson Sampling for Contextual Bandits with Linear Payoffs." *International Conference on Machine Learning (ICML)*.
+
+[^7]: Results are reported as mean ± SD across 64 independent seeds. Due to the stochastic nature of Gibbs sampling, exact values may vary between experimental runs.

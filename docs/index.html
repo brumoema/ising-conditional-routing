@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Bruna Moema">
-<meta name="dcterms.date" content="2026-02-06">
+<meta name="dcterms.date" content="2026-02-19">
 
 <title>Conditional Inference for Financial Order Routing Using Energy-Based Models – Conditional Inference: THRML &amp; Order Routing</title>
 <style>
@@ -142,7 +142,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">February 6, 2026</p>
+        <p class="date">February 19, 2026</p>
       </div>
     </div>
     
@@ -361,8 +361,8 @@ window.Quarto = {
 <section id="ising-inference" class="level3" data-number="5.2">
 <h3 data-number="5.2" class="anchored" data-anchor-id="ising-inference"><span class="header-section-number">5.2</span> THRML Agent: Conditional Ising Inference</h3>
 <p>The THRML agent models the venue system as an Ising EBM and uses clamped sampling for conditional inference.</p>
-<p><strong>Selection via clamping</strong>: Given context venues <span class="math inline">\(\mathcal{C}\)</span> with outcomes <span class="math inline">\(\mathbf{o}_{\mathcal{C}}\)</span>, the agent constructs an <code>IsingEBM</code>, clamps the context nodes to their observed states, and uses THRML’s <code>sample_states</code> to draw samples from <span class="math inline">\(P(X_{\text{free}} | X_{\mathcal{C}} = \mathbf{o}_{\mathcal{C}})\)</span>. The update rule also incorporates a mean-field signal propagation mechanism (propagation_damping=0.3) that accelerates belief diffusion across the graph. This mechanism helps propagate information from clamped nodes to free nodes via the coupling matrix <span class="math inline">\(J\)</span> before sampling: <span class="math inline">\(\text{bias}_{new} \leftarrow \text{bias}_{old} + \eta \beta (J \cdot \mathbf{x}_{obs}) (1 - m_{obs})\)</span>.</p>
-<p><strong>Implementation optimization</strong>: To maintain high throughput, the implementation utilizes “Static Infrastructure Pre-building” (<code>build_thrml_infra</code>). For general cases (like the synthetic experiments), the agent uses <strong>dynamic node permutation</strong> to map context nodes to the model’s first <span class="math inline">\(K\)</span> indices. In the specific case of real-world experiments (N=3), the implementation leverages an optimized branching strategy (using <code>lax.switch</code>) to select strictly pre-compiled static graphs. Both methods satisfy the library’s static block structure without requiring expensive graph reconstruction inside the performance loop.</p>
+<p><strong>Selection via clamping</strong>: Given context venues <span class="math inline">\(\mathcal{C}\)</span> with outcomes <span class="math inline">\(\mathbf{o}_{\mathcal{C}}\)</span>, the agent constructs an <code>IsingEBM</code>, clamps the context nodes to their observed states, and uses THRML’s <code>sample_states</code> to draw samples from <span class="math inline">\(P(X_{\text{free}} | X_{\mathcal{C}} = \mathbf{o}_{\mathcal{C}})\)</span>. The update rule also incorporates a mean-field signal propagation mechanism (propagation_damping=0.3) that accelerates belief diffusion across the graph. The full bias update at each step is: <span class="math inline">\(\mathbf{b}_{new} \leftarrow \gamma \, \mathbf{b}_{old} + \eta \beta (\mathbf{x}_{obs} - \hat{\mathbf{x}}_{obs}) + \delta \cdot \eta \beta (J \cdot \mathbf{x}_{obs})(1 - m_{obs})\)</span>, where <span class="math inline">\(\gamma\)</span> is the discount factor, <span class="math inline">\(\eta\)</span> is the learning rate, <span class="math inline">\(\mathbf{x}_{obs}\)</span> and <span class="math inline">\(\hat{\mathbf{x}}_{obs}\)</span> are the data and model node moments at observed positions (the contrastive divergence term), and <span class="math inline">\(\delta\)</span> is the propagation damping coefficient that propagates information from clamped nodes to free nodes via the coupling matrix <span class="math inline">\(J\)</span>.</p>
+<p><strong>Implementation optimization</strong>: To maintain high throughput, the implementation utilizes “Static Infrastructure Pre-building” (<code>build_thrml_infra</code>). For general cases (like the synthetic experiments), the agent uses <strong>dynamic node permutation</strong> to map context nodes to the model’s first <span class="math inline">\(K\)</span> indices. In the specific case of real-world experiments (N=3), the implementation leverages an optimized branching strategy (using <code>lax.switch</code>) to select among pre-computed graph topologies and schedules. While the current implementation re-binds the program wrapper per-step to pass updated model parameters into the sampling loop, it avoids the overhead of re-generating the underlying graph connectivity and block schedules.</p>
 <hr>
 </section>
 </section>
@@ -474,15 +474,30 @@ window.Quarto = {
 </ul></li>
 <li><p><strong>Robustness in Random Contexts</strong>: Even in “IID / Random”, where no correlations exist to exploit, THRML outperforms Thompson Sampling (0.96 vs 12.84), suggesting its internal regularization prevents it from hallucinating correlations (“overfitting”) while still optimizing for the immediate available rewards more efficiently than the baseline.</p></li>
 </ol>
+<section id="generative-verification-parameter-recovery" class="level4" data-number="6.1.1">
+<h4 data-number="6.1.1" class="anchored" data-anchor-id="generative-verification-parameter-recovery"><span class="header-section-number">6.1.1</span> Generative Verification: Parameter Recovery</h4>
+<p>Beyond minimizing regret, a key theoretical claim is that the THRML agent approximates the underlying energy landscape of the system. To verify this, a <strong>Generative Proof</strong> experiment was performed where a fresh THRML agent (no carryover from routing) was trained on the full, unmasked raw Ising outcomes to reconstruct the ground-truth Hamiltonian. This experiment used a <strong>static configuration</strong> (discount factor <span class="math inline">\(\gamma=1.0\)</span>, coupling decay <span class="math inline">\(\lambda=1.0\)</span>) to isolate the agent’s capacity for stationary parameter recovery. The Regime Shift scenario is intentionally excluded, as its non-stationarity precludes a meaningful steady-state ground truth comparison.</p>
+<p>The results<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> demonstrate that the agent recovers the system’s structure, as measured by the Mean Absolute Error (MAE) between sampled and ground-truth distributions (mean ± SD across 64 seeds, pass threshold: MAE <span class="math inline">\(&lt; 0.08\)</span>):</p>
+<ol type="1">
+<li><p><strong>IID Venues</strong> (GT biases: <span class="math inline">\([+0.5,\ 0.0,\ -0.5]\)</span>; GT coupling: <span class="math inline">\(0.0\)</span>): The agent accurately recovered the node biases (learned: <span class="math inline">\([+0.498,\ -0.003,\ -0.530]\)</span>) and learned near-zero coupling weights (<span class="math inline">\([0.027,\ 0.011,\ 0.008]\)</span>), consistent with the ground truth of no pairwise correlations. Evaluation passed both quality thresholds marginal MAE: <span class="math inline">\(0.0517 \pm 0.0227\)</span> (untrained baseline: <span class="math inline">\(0.1529\)</span>); correlation MAE: <span class="math inline">\(0.0662 \pm 0.0299\)</span> (untrained baseline: <span class="math inline">\(0.1031\)</span>). The small residual spurious correlations are characteristic of energy-based models fitting stochastic noise in finite datasets.</p></li>
+<li><p><strong>Correlated Venues</strong> (GT biases: <span class="math inline">\([+0.5,\ 0.0,\ -0.5]\)</span>; GT coupling: <span class="math inline">\(0.4\)</span>): The agent reconstructed both the heterogeneous biases (learned: <span class="math inline">\([+0.487,\ -0.016,\ -0.540]\)</span>) and the positive coupling structure (learned weights: <span class="math inline">\([0.419,\ 0.412,\ 0.418]\)</span>), closely tracking the ground truth coupling of <span class="math inline">\(0.4\)</span> across all pairs. Evaluation passed both quality thresholds: marginal MAE: <span class="math inline">\(0.0746 \pm 0.0527\)</span> (untrained baseline: <span class="math inline">\(0.0918\)</span>); correlation MAE: <span class="math inline">\(0.0592 \pm 0.0322\)</span> (untrained baseline: <span class="math inline">\(0.4231\)</span>). Pairwise correlations are recovered with high fidelity, confirming that THRML’s contrastive divergence updates successfully identify the interaction structure of the market.</p></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="experiments/images/generative_proof_results.png" class="img-fluid figure-img"></p>
+<figcaption>Generative Proof: Raw Distribution Learning (No Routing): Comparison of learned vs.&nbsp;ground truth marginals and pairwise correlations for IID and Correlated venue scenarios.</figcaption>
+</figure>
+</div>
+</section>
 </section>
 <section id="real-world" class="level3" data-number="6.2">
 <h3 data-number="6.2" class="anchored" data-anchor-id="real-world"><span class="header-section-number">6.2</span> Real-World Data Experiments</h3>
 <p>Evaluation is performed on aligned trade data from Coinbase, Kraken, and Bitstamp (N=3, K=1).</p>
 <p><strong>Experimental Setup:</strong></p>
 <ul>
-<li><strong>Data Acquisition</strong>: A rolling window mechanism fetches the most recent 10,000 seconds of trade data to ensure relevance to current market conditions<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</li>
+<li><strong>Data Acquisition</strong>: A rolling window mechanism fetches the most recent 10,000 seconds of trade data to ensure relevance to current market conditions<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</li>
 <li><strong>10,000 time steps</strong> of aligned market data captured from this window.</li>
-<li><strong>200 independent runs</strong> to ensure reproducible statistics<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</li>
+<li><strong>200 independent runs</strong> to ensure reproducible statistics<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</li>
 <li>Adaptation rate <span class="math inline">\(\alpha = 0.05\)</span> (<code>learning_rate</code>), discount factor 0.995, and coupling decay 0.995.</li>
 <li>THRML precision: <code>n_warmup=50</code>, <code>n_samples=100</code>, <code>steps_per_sample=4</code>.</li>
 </ul>
@@ -571,8 +586,9 @@ window.Quarto = {
 <li id="fn2"><p>This work addresses the problem of execution uncertainty. We consider settings where the market/venue state is partially observed or stochastic (e.g., dark pools or rapidly changing order books), so the agent must learn probabilistic execution outcomes, rather than optimizing against a single static snapshot.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>Projected efficiency refers to the future TSU hardware architecture; current studies validate algorithmic superiority via GPU-based simulation.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>Context venues are excluded from the action set to enforce a generalization task. The objective is to test the agent’s ability to infer the state of unobserved venues via learned correlations, rather than simply exploiting the visible information in the context window.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>The provided research notebook defaults to a live rolling window. The results presented here are from a fixed archival snapshot (1770037944132 to 1770047944132, February 2, 2026) to ensure consistent comparison.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Processed in batches of 50 seeds to manage GPU memory constraints, distinct from the fully parallelized synthetic execution.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Results are reported as mean ± SD across 64 independent seeds. Due to the stochastic nature of Gibbs sampling, exact values may vary between experimental runs.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>The provided research notebook defaults to a live rolling window. The results presented here are from a fixed archival snapshot (1770037944132 to 1770047944132, February 2, 2026) to ensure consistent comparison.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Processed in batches of 50 seeds to manage GPU memory constraints, distinct from the fully parallelized synthetic execution.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

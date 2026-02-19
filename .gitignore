@@ -1,6 +1,7 @@
 .venv/
 .agent/
 .github/
+AGENTS.md
 __pycache__/
 *.pyc
 .ipynb_checkpoints/

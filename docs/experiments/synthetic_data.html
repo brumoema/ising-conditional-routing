@@ -351,6 +351,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install <span class="op">--</span>quiet thrml</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install <span class="op">--</span>quiet matplotlib</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
+<div class="cell-output cell-output-stdout">
+<div class="ansi-escaped-output">
+<pre>   <span class="ansi-bright-black-fg">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-green-fg">181.2/181.2 kB</span> <span class="ansi-red-fg">8.0 MB/s</span> eta <span class="ansi-cyan-fg">0:00:00</span>
+
+   <span class="ansi-bright-black-fg">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-green-fg">56.3/56.3 kB</span> <span class="ansi-red-fg">6.2 MB/s</span> eta <span class="ansi-cyan-fg">0:00:00</span>
+
+</pre>
+</div>
+</div>
 </div>
 <div id="cell-3" class="cell" data-execution_count="2">
 <details class="code-fold">
@@ -414,7 +423,7 @@ Devices: [CudaDevice(id=0)]</code></pre>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    regime_shift_biases: Optional[jnp.ndarray]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="cell-6" class="cell" data-execution_count="5">
+<div id="cell-6" class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AgentState_CEG(NamedTuple):</span>
@@ -612,7 +621,7 @@ Devices: [CudaDevice(id=0)]</code></pre>
 <span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> AgentState_CEG(successes<span class="op">=</span>new_successes, counts<span class="op">=</span>new_counts)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="cell-10" class="cell" data-execution_count="9">
+<div id="cell-10" class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Contextual Thompson Sampling agent implementation</span></span>
@@ -723,7 +732,7 @@ Devices: [CudaDevice(id=0)]</code></pre>
 <span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> node_moms, edge_moms</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="cell-12" class="cell">
+<div id="cell-12" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_outcomes_jit(biases, correlation_weight, beta, key, sim_struct_helper):</span>
@@ -745,7 +754,7 @@ Devices: [CudaDevice(id=0)]</code></pre>
 <span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Single Gibbs sample to get the current market state</span></span>
 <span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    sched <span class="op">=</span> SamplingSchedule(n_warmup<span class="op">=</span><span class="dv">100</span>, n_samples<span class="op">=</span><span class="dv">1</span>, steps_per_sample<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    k1, k2 <span class="op">=</span> random.split(key)</span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    init <span class="op">=</span> hinton_init(k1, model, serial_blocks, [])</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    init <span class="op">=</span> hinton_init(k1, model, serial_blocks, ())</span>
 <span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    samples <span class="op">=</span> sample_states(k2, prog, sched, init, [], full_block)[<span class="dv">0</span>]</span>
 <span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    </span>
@@ -771,7 +780,7 @@ Devices: [CudaDevice(id=0)]</code></pre>
 <span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> discrete_outcomes, latent_scores</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="cell-13" class="cell">
+<div id="cell-13" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_single_seed_experiment(</span>
@@ -899,8 +908,11 @@ Devices: [CudaDevice(id=0)]</code></pre>
 <span id="cb13-123"><a href="#cb13-123" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
 <span id="cb13-124"><a href="#cb13-124" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Contextual ε-Greedy"</span>: jnp.cumsum(step_regrets[:, <span class="dv">0</span>]),</span>
 <span id="cb13-125"><a href="#cb13-125" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Contextual Thompson Sampling"</span>: jnp.cumsum(step_regrets[:, <span class="dv">1</span>]),</span>
-<span id="cb13-126"><a href="#cb13-126" aria-hidden="true" tabindex="-1"></a>        <span class="st">"THRML"</span>: jnp.cumsum(step_regrets[:, <span class="dv">2</span>])</span>
-<span id="cb13-127"><a href="#cb13-127" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-126"><a href="#cb13-126" aria-hidden="true" tabindex="-1"></a>        <span class="st">"THRML"</span>: jnp.cumsum(step_regrets[:, <span class="dv">2</span>]),</span>
+<span id="cb13-127"><a href="#cb13-127" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Learned Ising parameters (for generative evaluation)</span></span>
+<span id="cb13-128"><a href="#cb13-128" aria-hidden="true" tabindex="-1"></a>        <span class="st">"thrml_biases"</span>: final_carry.agent_thrml.biases,</span>
+<span id="cb13-129"><a href="#cb13-129" aria-hidden="true" tabindex="-1"></a>        <span class="st">"thrml_weights"</span>: final_carry.agent_thrml.weights</span>
+<span id="cb13-130"><a href="#cb13-130" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div id="cell-14" class="cell" data-execution_count="13">
@@ -1028,13 +1040,13 @@ CONDITIONAL ROUTING EXPERIMENT - FIXED CONTEXT (Venue 0)
 ================================================================================
 Compiling and running scenario: IID Venues on GPU...
   Context mode: fixed
-Finished 200 seeds x 10000 steps in 167.1170s
+Finished 200 seeds x 10000 steps in 166.8043s
 Compiling and running scenario: Correlated Venues on GPU...
   Context mode: fixed
-Finished 200 seeds x 10000 steps in 165.5142s
+Finished 200 seeds x 10000 steps in 165.9895s
 Compiling and running scenario: Regime Shift on GPU...
   Context mode: fixed
-Finished 200 seeds x 10000 steps in 166.3660s
+Finished 200 seeds x 10000 steps in 166.8838s
 Saved plot to conditional_sor_fixed_results.png</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -1066,13 +1078,13 @@ CONDITIONAL ROUTING EXPERIMENT - RANDOM CONTEXT
 ================================================================================
 Compiling and running scenario: IID Venues on GPU...
   Context mode: random
-Finished 200 seeds x 10000 steps in 166.1384s
+Finished 200 seeds x 10000 steps in 168.1147s
 Compiling and running scenario: Correlated Venues on GPU...
   Context mode: random
-Finished 200 seeds x 10000 steps in 166.2799s
+Finished 200 seeds x 10000 steps in 167.2896s
 Compiling and running scenario: Regime Shift on GPU...
   Context mode: random
-Finished 200 seeds x 10000 steps in 165.7862s
+Finished 200 seeds x 10000 steps in 167.4150s
 Saved plot to conditional_sor_random_results.png</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -1114,8 +1126,484 @@ Regime Shift              | random     | 2052.6199  | 2596.8799  | 1444.4800
 ================================================================================</code></pre>
 </div>
 </div>
+</section>
+<section id="generative-proof-learning-raw-market-distributions" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="generative-proof-learning-raw-market-distributions"><span class="header-section-number">1.8</span> Generative Proof: Learning Raw Market Distributions</h2>
+<section id="motivation" class="level3" data-number="1.8.1">
+<h3 data-number="1.8.1" class="anchored" data-anchor-id="motivation"><span class="header-section-number">1.8.1</span> Motivation</h3>
+<p>This section is a <strong>completely independent experiment</strong> that tests THRML’s ability to learn the <em>raw</em> Ising data-generating process, stripped of all routing logic.</p>
+<p>Unlike the conditional routing experiment above (where THRML only observes partial, context-masked outcomes through winner-takes-all labels) here we train a <strong>fresh THRML agent</strong> on the full, unmasked raw market outcomes.</p>
+</section>
+<section id="protocol" class="level3" data-number="1.8.2">
+<h3 data-number="1.8.2" class="anchored" data-anchor-id="protocol"><span class="header-section-number">1.8.2</span> Protocol</h3>
+<ol type="1">
+<li><strong>Initialize</strong> a new THRML agent with zeroed parameters (no carryover from routing)</li>
+<li><strong>At each step:</strong>
+<ul>
+<li>Generate raw venue outcomes from the ground-truth Ising model (<code>sample_outcomes_jit</code>)</li>
+<li>Show <strong>all</strong> venues’ raw outcomes to THRML (<code>obs_mask = all ones</code>)</li>
+<li>Update the agent’s biases and weights via <code>thrml_update</code></li>
+</ul></li>
+<li><strong>After training</strong>, sample from the learned model and compare against ground truth</li>
+</ol>
+</section>
+<section id="what-this-proves" class="level3" data-number="1.8.3">
+<h3 data-number="1.8.3" class="anchored" data-anchor-id="what-this-proves"><span class="header-section-number">1.8.3</span> What This Proves</h3>
+<p>If the learned model’s marginals and correlations match the ground truth, it demonstrates that THRML isn’t just a routing heuristic: it is a <strong>genuine generative model</strong> that recovers the underlying joint distribution of market outcomes.</p>
+<div id="81957546" class="cell" data-execution_count="19">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Generative Proof: Training on Raw Ising Outcomes ──</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_generative_proof_single(</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    master_seed: jax.Array,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    config: ExperimentConfig,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    scenario_config: ScenarioConfig,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    infra: <span class="bu">dict</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    sim_struct_helper: <span class="bu">tuple</span>,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    gt_biases: jnp.ndarray,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    n_gen_steps: <span class="bu">int</span> <span class="op">=</span> <span class="dv">10000</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="co">    Train a FRESH THRML agent on raw Ising outcomes using lax.scan.</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="co">    No routing, no winner-takes-all, no context/selection logic.</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="co">    Uses lax.scan for JAX-optimized loop compilation (matching the routing experiment pattern).</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> config.n_venues</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> master_seed</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>    agent <span class="op">=</span> thrml_init(n, window_size<span class="op">=</span>config.window_size)</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    obs_mask <span class="op">=</span> jnp.ones(n)</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>    Carry <span class="op">=</span> NamedTuple(<span class="st">"Carry"</span>, [</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>        (<span class="st">"rng"</span>, jax.Array),</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>        (<span class="st">"agent_thrml"</span>, AgentState_THRML),</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>    init_carry <span class="op">=</span> Carry(rng, agent)</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> step_fn(carry: Carry, step_idx: <span class="bu">int</span>):</span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>        rng <span class="op">=</span> carry.rng</span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>        rng, k_sim, k_update <span class="op">=</span> random.split(rng, <span class="dv">3</span>)</span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>        outcomes, _ <span class="op">=</span> sample_outcomes_jit(</span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>            gt_biases,</span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>            scenario_config.correlation_weight,</span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>            config.beta,</span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>            k_sim,</span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a>            sim_struct_helper</span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>        model_node_moms, model_edge_moms <span class="op">=</span> thrml_sample_joint(</span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>            carry.agent_thrml,</span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a>            k_update,</span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a>            infra,</span>
+<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a>            config</span>
+<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>        next_thrml <span class="op">=</span> thrml_update(</span>
+<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>            carry.agent_thrml,</span>
+<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>            outcomes,</span>
+<span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a>            obs_mask,</span>
+<span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a>            model_node_moms<span class="op">=</span>model_node_moms,</span>
+<span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a>            model_edge_moms<span class="op">=</span>model_edge_moms,</span>
+<span id="cb23-56"><a href="#cb23-56" aria-hidden="true" tabindex="-1"></a>            discount_factor<span class="op">=</span>config.discount_factor,</span>
+<span id="cb23-57"><a href="#cb23-57" aria-hidden="true" tabindex="-1"></a>            beta<span class="op">=</span>config.beta,</span>
+<span id="cb23-58"><a href="#cb23-58" aria-hidden="true" tabindex="-1"></a>            learning_rate<span class="op">=</span>config.learning_rate,</span>
+<span id="cb23-59"><a href="#cb23-59" aria-hidden="true" tabindex="-1"></a>            propagation_damping<span class="op">=</span>config.propagation_damping,</span>
+<span id="cb23-60"><a href="#cb23-60" aria-hidden="true" tabindex="-1"></a>            coupling_decay<span class="op">=</span>config.coupling_decay,</span>
+<span id="cb23-61"><a href="#cb23-61" aria-hidden="true" tabindex="-1"></a>            damp_coupling<span class="op">=</span>config.damp_coupling</span>
+<span id="cb23-62"><a href="#cb23-62" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb23-63"><a href="#cb23-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-64"><a href="#cb23-64" aria-hidden="true" tabindex="-1"></a>        next_carry <span class="op">=</span> Carry(rng, next_thrml)</span>
+<span id="cb23-65"><a href="#cb23-65" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> next_carry, <span class="va">None</span></span>
+<span id="cb23-66"><a href="#cb23-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-67"><a href="#cb23-67" aria-hidden="true" tabindex="-1"></a>    steps <span class="op">=</span> jnp.arange(n_gen_steps)</span>
+<span id="cb23-68"><a href="#cb23-68" aria-hidden="true" tabindex="-1"></a>    final_carry, _ <span class="op">=</span> lax.scan(step_fn, init_carry, steps)</span>
+<span id="cb23-69"><a href="#cb23-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-70"><a href="#cb23-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb23-71"><a href="#cb23-71" aria-hidden="true" tabindex="-1"></a>        <span class="st">'learned_biases'</span>: final_carry.agent_thrml.biases,</span>
+<span id="cb23-72"><a href="#cb23-72" aria-hidden="true" tabindex="-1"></a>        <span class="st">'learned_weights'</span>: final_carry.agent_thrml.weights,</span>
+<span id="cb23-73"><a href="#cb23-73" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb23-74"><a href="#cb23-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-75"><a href="#cb23-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-76"><a href="#cb23-76" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_generative_proof_training(</span>
+<span id="cb23-77"><a href="#cb23-77" aria-hidden="true" tabindex="-1"></a>    scenario: ScenarioConfig,</span>
+<span id="cb23-78"><a href="#cb23-78" aria-hidden="true" tabindex="-1"></a>    config: ExperimentConfig,</span>
+<span id="cb23-79"><a href="#cb23-79" aria-hidden="true" tabindex="-1"></a>    n_gen_steps: <span class="bu">int</span> <span class="op">=</span> <span class="dv">10000</span>,</span>
+<span id="cb23-80"><a href="#cb23-80" aria-hidden="true" tabindex="-1"></a>    n_seeds: <span class="bu">int</span> <span class="op">=</span> <span class="dv">64</span></span>
+<span id="cb23-81"><a href="#cb23-81" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb23-82"><a href="#cb23-82" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb23-83"><a href="#cb23-83" aria-hidden="true" tabindex="-1"></a><span class="co">    Builds infrastructure once, then runs multi-seed training with JIT+VMAP</span></span>
+<span id="cb23-84"><a href="#cb23-84" aria-hidden="true" tabindex="-1"></a><span class="co">    to estimate variance of learned parameters.</span></span>
+<span id="cb23-85"><a href="#cb23-85" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb23-86"><a href="#cb23-86" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> config.n_venues</span>
+<span id="cb23-87"><a href="#cb23-87" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="sc">{</span><span class="st">'─'</span><span class="op">*</span><span class="dv">60</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-88"><a href="#cb23-88" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Generative Proof Training: </span><span class="sc">{</span>scenario<span class="sc">.</span>name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-89"><a href="#cb23-89" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  n_venues=</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">, n_steps=</span><span class="sc">{</span>n_gen_steps<span class="sc">}</span><span class="ss">, n_seeds=</span><span class="sc">{</span>n_seeds<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-90"><a href="#cb23-90" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Stationary settings: discount_factor=</span><span class="sc">{</span>config<span class="sc">.</span>discount_factor<span class="sc">}</span><span class="ss">, coupling_decay=</span><span class="sc">{</span>config<span class="sc">.</span>coupling_decay<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-91"><a href="#cb23-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-92"><a href="#cb23-92" aria-hidden="true" tabindex="-1"></a>    gt_biases <span class="op">=</span> (</span>
+<span id="cb23-93"><a href="#cb23-93" aria-hidden="true" tabindex="-1"></a>        scenario.regime_shift_biases</span>
+<span id="cb23-94"><a href="#cb23-94" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> scenario.regime_shift_step <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span></span>
+<span id="cb23-95"><a href="#cb23-95" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> scenario.biases</span>
+<span id="cb23-96"><a href="#cb23-96" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb23-97"><a href="#cb23-97" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  GT biases=</span><span class="sc">{</span>np<span class="sc">.</span>array(gt_biases)<span class="sc">}</span><span class="ss">, GT corr_w=</span><span class="sc">{</span>scenario<span class="sc">.</span>correlation_weight<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-98"><a href="#cb23-98" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'─'</span><span class="op">*</span><span class="dv">60</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-99"><a href="#cb23-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-100"><a href="#cb23-100" aria-hidden="true" tabindex="-1"></a>    infra <span class="op">=</span> build_thrml_infra(n, config)</span>
+<span id="cb23-101"><a href="#cb23-101" aria-hidden="true" tabindex="-1"></a>    sim_struct_helper <span class="op">=</span> (infra[<span class="st">'nodes'</span>], infra[<span class="st">'edges'</span>], infra[<span class="st">'full_block'</span>])</span>
+<span id="cb23-102"><a href="#cb23-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-103"><a href="#cb23-103" aria-hidden="true" tabindex="-1"></a>    master <span class="op">=</span> random.key(<span class="dv">0</span>)</span>
+<span id="cb23-104"><a href="#cb23-104" aria-hidden="true" tabindex="-1"></a>    seeds <span class="op">=</span> random.split(master, n_seeds)</span>
+<span id="cb23-105"><a href="#cb23-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-106"><a href="#cb23-106" aria-hidden="true" tabindex="-1"></a>    run_one <span class="op">=</span> partial(</span>
+<span id="cb23-107"><a href="#cb23-107" aria-hidden="true" tabindex="-1"></a>        run_generative_proof_single,</span>
+<span id="cb23-108"><a href="#cb23-108" aria-hidden="true" tabindex="-1"></a>        config<span class="op">=</span>config,</span>
+<span id="cb23-109"><a href="#cb23-109" aria-hidden="true" tabindex="-1"></a>        scenario_config<span class="op">=</span>scenario,</span>
+<span id="cb23-110"><a href="#cb23-110" aria-hidden="true" tabindex="-1"></a>        infra<span class="op">=</span>infra,</span>
+<span id="cb23-111"><a href="#cb23-111" aria-hidden="true" tabindex="-1"></a>        sim_struct_helper<span class="op">=</span>sim_struct_helper,</span>
+<span id="cb23-112"><a href="#cb23-112" aria-hidden="true" tabindex="-1"></a>        gt_biases<span class="op">=</span>gt_biases,</span>
+<span id="cb23-113"><a href="#cb23-113" aria-hidden="true" tabindex="-1"></a>        n_gen_steps<span class="op">=</span>n_gen_steps,</span>
+<span id="cb23-114"><a href="#cb23-114" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb23-115"><a href="#cb23-115" aria-hidden="true" tabindex="-1"></a>    run_all <span class="op">=</span> jit(vmap(run_one))</span>
+<span id="cb23-116"><a href="#cb23-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-117"><a href="#cb23-117" aria-hidden="true" tabindex="-1"></a>    start_t <span class="op">=</span> time.time()</span>
+<span id="cb23-118"><a href="#cb23-118" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> run_all(seeds)</span>
+<span id="cb23-119"><a href="#cb23-119" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> jax.tree_util.tree_map(<span class="kw">lambda</span> x: x.block_until_ready(), results)</span>
+<span id="cb23-120"><a href="#cb23-120" aria-hidden="true" tabindex="-1"></a>    elapsed <span class="op">=</span> time.time() <span class="op">-</span> start_t</span>
+<span id="cb23-121"><a href="#cb23-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-122"><a href="#cb23-122" aria-hidden="true" tabindex="-1"></a>    learned_biases <span class="op">=</span> results[<span class="st">'learned_biases'</span>]</span>
+<span id="cb23-123"><a href="#cb23-123" aria-hidden="true" tabindex="-1"></a>    learned_weights <span class="op">=</span> results[<span class="st">'learned_weights'</span>]</span>
+<span id="cb23-124"><a href="#cb23-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-125"><a href="#cb23-125" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Training complete in </span><span class="sc">{</span>elapsed<span class="sc">:.2f}</span><span class="ss">s"</span>)</span>
+<span id="cb23-126"><a href="#cb23-126" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Learned biases mean±std:  </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">round</span>(np.array(jnp.mean(learned_biases, axis<span class="op">=</span><span class="dv">0</span>)), <span class="dv">4</span>)<span class="sc">}</span><span class="ss"> ± </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">round</span>(np.array(jnp.std(learned_biases, axis<span class="op">=</span><span class="dv">0</span>)), <span class="dv">4</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-127"><a href="#cb23-127" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Learned weights mean±std: </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">round</span>(np.array(jnp.mean(learned_weights, axis<span class="op">=</span><span class="dv">0</span>)), <span class="dv">4</span>)<span class="sc">}</span><span class="ss"> ± </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">round</span>(np.array(jnp.std(learned_weights, axis<span class="op">=</span><span class="dv">0</span>)), <span class="dv">4</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-128"><a href="#cb23-128" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  GT biases:                </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">round</span>(np.array(gt_biases), <span class="dv">4</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-129"><a href="#cb23-129" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  GT weights:               </span><span class="sc">{</span>scenario<span class="sc">.</span>correlation_weight<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-130"><a href="#cb23-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-131"><a href="#cb23-131" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb23-132"><a href="#cb23-132" aria-hidden="true" tabindex="-1"></a>        <span class="st">'learned_biases'</span>: learned_biases,</span>
+<span id="cb23-133"><a href="#cb23-133" aria-hidden="true" tabindex="-1"></a>        <span class="st">'learned_weights'</span>: learned_weights,</span>
+<span id="cb23-134"><a href="#cb23-134" aria-hidden="true" tabindex="-1"></a>        <span class="st">'gt_biases'</span>: gt_biases,</span>
+<span id="cb23-135"><a href="#cb23-135" aria-hidden="true" tabindex="-1"></a>        <span class="st">'gt_correlation_weight'</span>: scenario.correlation_weight,</span>
+<span id="cb23-136"><a href="#cb23-136" aria-hidden="true" tabindex="-1"></a>        <span class="st">'n_seeds'</span>: n_seeds,</span>
+<span id="cb23-137"><a href="#cb23-137" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb23-138"><a href="#cb23-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-139"><a href="#cb23-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-140"><a href="#cb23-140" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Run Generative Proof Training ──</span></span>
+<span id="cb23-141"><a href="#cb23-141" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb23-142"><a href="#cb23-142" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"GENERATIVE PROOF — Training THRML on Raw Ising Outcomes"</span>)</span>
+<span id="cb23-143"><a href="#cb23-143" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb23-144"><a href="#cb23-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-145"><a href="#cb23-145" aria-hidden="true" tabindex="-1"></a><span class="co"># Stationary generative target: disable forgetting/decay attenuation.</span></span>
+<span id="cb23-146"><a href="#cb23-146" aria-hidden="true" tabindex="-1"></a>gen_config <span class="op">=</span> ExperimentConfig(discount_factor<span class="op">=</span><span class="fl">1.0</span>, coupling_decay<span class="op">=</span><span class="fl">1.0</span>)</span>
+<span id="cb23-147"><a href="#cb23-147" aria-hidden="true" tabindex="-1"></a>gen_n_seeds <span class="op">=</span> <span class="dv">64</span></span>
+<span id="cb23-148"><a href="#cb23-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-149"><a href="#cb23-149" aria-hidden="true" tabindex="-1"></a><span class="co"># Exclude regime-shift from the stationary generative proof.</span></span>
+<span id="cb23-150"><a href="#cb23-150" aria-hidden="true" tabindex="-1"></a>gen_scenarios <span class="op">=</span> [s <span class="cf">for</span> s <span class="kw">in</span> scenarios <span class="cf">if</span> s.name <span class="op">!=</span> <span class="st">"Regime Shift"</span>]</span>
+<span id="cb23-151"><a href="#cb23-151" aria-hidden="true" tabindex="-1"></a>excluded <span class="op">=</span> [s.name <span class="cf">for</span> s <span class="kw">in</span> scenarios <span class="cf">if</span> s.name <span class="op">==</span> <span class="st">"Regime Shift"</span>]</span>
+<span id="cb23-152"><a href="#cb23-152" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> excluded:</span>
+<span id="cb23-153"><a href="#cb23-153" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Excluded from Generative Proof: </span><span class="sc">{</span>excluded<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-154"><a href="#cb23-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-155"><a href="#cb23-155" aria-hidden="true" tabindex="-1"></a>gen_proof_results <span class="op">=</span> {}</span>
+<span id="cb23-156"><a href="#cb23-156" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> scenario <span class="kw">in</span> gen_scenarios:</span>
+<span id="cb23-157"><a href="#cb23-157" aria-hidden="true" tabindex="-1"></a>    gen_proof_results[scenario.name] <span class="op">=</span> run_generative_proof_training(</span>
+<span id="cb23-158"><a href="#cb23-158" aria-hidden="true" tabindex="-1"></a>        scenario,</span>
+<span id="cb23-159"><a href="#cb23-159" aria-hidden="true" tabindex="-1"></a>        gen_config,</span>
+<span id="cb23-160"><a href="#cb23-160" aria-hidden="true" tabindex="-1"></a>        n_gen_steps<span class="op">=</span><span class="dv">10000</span>,</span>
+<span id="cb23-161"><a href="#cb23-161" aria-hidden="true" tabindex="-1"></a>        n_seeds<span class="op">=</span>gen_n_seeds,</span>
+<span id="cb23-162"><a href="#cb23-162" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>================================================================================
+GENERATIVE PROOF — Training THRML on Raw Ising Outcomes
+================================================================================
+Excluded from Generative Proof: ['Regime Shift']
+
+────────────────────────────────────────────────────────────
+Generative Proof Training: IID Venues
+  n_venues=3, n_steps=10000, n_seeds=64
+  Stationary settings: discount_factor=1.0, coupling_decay=1.0
+  GT biases=[ 0.5  0.  -0.5], GT corr_w=0.0
+────────────────────────────────────────────────────────────
+  Training complete in 85.11s
+  Learned biases mean±std:  [ 0.4983 -0.0026 -0.5302] ± [0.1637 0.1635 0.1845]
+  Learned weights mean±std: [0.0267 0.0106 0.0076] ± [0.0778 0.1087 0.0932]
+  GT biases:                [ 0.5  0.  -0.5]
+  GT weights:               0.0
+
+────────────────────────────────────────────────────────────
+Generative Proof Training: Correlated Venues
+  n_venues=3, n_steps=10000, n_seeds=64
+  Stationary settings: discount_factor=1.0, coupling_decay=1.0
+  GT biases=[ 0.5  0.  -0.5], GT corr_w=0.4
+────────────────────────────────────────────────────────────
+  Training complete in 84.17s
+  Learned biases mean±std:  [ 0.487  -0.0158 -0.5402] ± [0.1778 0.1839 0.1906]
+  Learned weights mean±std: [0.4192 0.4119 0.4176] ± [0.0849 0.1116 0.0899]
+  GT biases:                [ 0.5  0.  -0.5]
+  GT weights:               0.4</code></pre>
+</div>
+</div>
+<div id="47edfe52" class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Generative Proof: Evaluation — Sampling, Metrics &amp; Comparison Plots ──</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_generative_proof_evaluation(</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    gen_proof_results,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    config,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    n_eval_samples<span class="op">=</span><span class="dv">1500</span>,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    mae_tolerance<span class="op">=</span><span class="fl">0.08</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">    Evaluate generative quality of THRML trained on raw outcomes.</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co">    Reports mean±std MAE across seeds for marginals and pairwise correlations,</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="co">    plus pass/fail against a tolerance.</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    evaluations <span class="op">=</span> {}</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    infra <span class="op">=</span> build_thrml_infra(config.n_venues, config)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    eval_sched <span class="op">=</span> SamplingSchedule(</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>        n_warmup<span class="op">=</span><span class="dv">200</span>,</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>        n_samples<span class="op">=</span>n_eval_samples,</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>        steps_per_sample<span class="op">=</span>config.steps_per_sample</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>    serial_blocks <span class="op">=</span> [Block([n]) <span class="cf">for</span> n <span class="kw">in</span> infra[<span class="st">'nodes'</span>]]</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> sample_model_stats(key, biases, weights):</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> IsingEBM(</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>            infra[<span class="st">'nodes'</span>],</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>            infra[<span class="st">'edges'</span>],</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>            biases,</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>            weights,</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>            jnp.array(config.beta)</span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>        prog <span class="op">=</span> IsingSamplingProgram(model, serial_blocks, [])</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>        k1, k2 <span class="op">=</span> random.split(key)</span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>        init_state <span class="op">=</span> hinton_init(k1, model, serial_blocks, ())</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>        raw_samples <span class="op">=</span> sample_states(k2, prog, eval_sched, init_state, [], infra[<span class="st">'full_block'</span>])[<span class="dv">0</span>]</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>        spins <span class="op">=</span> (<span class="dv">2</span> <span class="op">*</span> raw_samples.astype(jnp.float32) <span class="op">-</span> <span class="dv">1</span>).reshape(<span class="op">-</span><span class="dv">1</span>, config.n_venues)</span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>        marginals <span class="op">=</span> (jnp.mean(spins, axis<span class="op">=</span><span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span>) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>        triu_idx <span class="op">=</span> jnp.triu_indices(config.n_venues, <span class="dv">1</span>)</span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>        correlations <span class="op">=</span> ((spins.T <span class="op">@</span> spins) <span class="op">/</span> spins.shape[<span class="dv">0</span>])[triu_idx]</span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> marginals, correlations</span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name, res <span class="kw">in</span> gen_proof_results.items():</span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Evaluating generative quality: </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>        learned_biases <span class="op">=</span> res[<span class="st">'learned_biases'</span>]</span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a>        learned_weights <span class="op">=</span> res[<span class="st">'learned_weights'</span>]</span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a>        gt_biases <span class="op">=</span> res[<span class="st">'gt_biases'</span>]</span>
+<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a>        n_edges <span class="op">=</span> (config.n_venues <span class="op">*</span> (config.n_venues <span class="op">-</span> <span class="dv">1</span>)) <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a>        gt_weights <span class="op">=</span> jnp.full((n_edges,), res[<span class="st">'gt_correlation_weight'</span>])</span>
+<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a>        baseline_biases <span class="op">=</span> jnp.zeros_like(gt_biases)</span>
+<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a>        baseline_weights <span class="op">=</span> jnp.zeros_like(gt_weights)</span>
+<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> random.key(<span class="dv">99</span>)</span>
+<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a>        k_gt, k_base, k_seed <span class="op">=</span> random.split(key, <span class="dv">3</span>)</span>
+<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-58"><a href="#cb25-58" aria-hidden="true" tabindex="-1"></a>        gt_marginals, gt_correlations <span class="op">=</span> sample_model_stats(k_gt, gt_biases, gt_weights)</span>
+<span id="cb25-59"><a href="#cb25-59" aria-hidden="true" tabindex="-1"></a>        baseline_marginals, baseline_correlations <span class="op">=</span> sample_model_stats(k_base, baseline_biases, baseline_weights)</span>
+<span id="cb25-60"><a href="#cb25-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-61"><a href="#cb25-61" aria-hidden="true" tabindex="-1"></a>        seed_keys <span class="op">=</span> random.split(k_seed, learned_biases.shape[<span class="dv">0</span>])</span>
+<span id="cb25-62"><a href="#cb25-62" aria-hidden="true" tabindex="-1"></a>        learned_marginals, learned_correlations <span class="op">=</span> vmap(</span>
+<span id="cb25-63"><a href="#cb25-63" aria-hidden="true" tabindex="-1"></a>            <span class="kw">lambda</span> b, w, k: sample_model_stats(k, b, w)</span>
+<span id="cb25-64"><a href="#cb25-64" aria-hidden="true" tabindex="-1"></a>        )(learned_biases, learned_weights, seed_keys)</span>
+<span id="cb25-65"><a href="#cb25-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-66"><a href="#cb25-66" aria-hidden="true" tabindex="-1"></a>        marg_mae_per_seed <span class="op">=</span> jnp.mean(jnp.<span class="bu">abs</span>(learned_marginals <span class="op">-</span> gt_marginals), axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb25-67"><a href="#cb25-67" aria-hidden="true" tabindex="-1"></a>        corr_mae_per_seed <span class="op">=</span> jnp.mean(jnp.<span class="bu">abs</span>(learned_correlations <span class="op">-</span> gt_correlations), axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb25-68"><a href="#cb25-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-69"><a href="#cb25-69" aria-hidden="true" tabindex="-1"></a>        marg_mae_mean <span class="op">=</span> <span class="bu">float</span>(jnp.mean(marg_mae_per_seed))</span>
+<span id="cb25-70"><a href="#cb25-70" aria-hidden="true" tabindex="-1"></a>        marg_mae_std <span class="op">=</span> <span class="bu">float</span>(jnp.std(marg_mae_per_seed))</span>
+<span id="cb25-71"><a href="#cb25-71" aria-hidden="true" tabindex="-1"></a>        corr_mae_mean <span class="op">=</span> <span class="bu">float</span>(jnp.mean(corr_mae_per_seed))</span>
+<span id="cb25-72"><a href="#cb25-72" aria-hidden="true" tabindex="-1"></a>        corr_mae_std <span class="op">=</span> <span class="bu">float</span>(jnp.std(corr_mae_per_seed))</span>
+<span id="cb25-73"><a href="#cb25-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-74"><a href="#cb25-74" aria-hidden="true" tabindex="-1"></a>        baseline_marg_mae <span class="op">=</span> <span class="bu">float</span>(jnp.mean(jnp.<span class="bu">abs</span>(baseline_marginals <span class="op">-</span> gt_marginals)))</span>
+<span id="cb25-75"><a href="#cb25-75" aria-hidden="true" tabindex="-1"></a>        baseline_corr_mae <span class="op">=</span> <span class="bu">float</span>(jnp.mean(jnp.<span class="bu">abs</span>(baseline_correlations <span class="op">-</span> gt_correlations)))</span>
+<span id="cb25-76"><a href="#cb25-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-77"><a href="#cb25-77" aria-hidden="true" tabindex="-1"></a>        pass_marg <span class="op">=</span> marg_mae_mean <span class="op">&lt;</span> mae_tolerance</span>
+<span id="cb25-78"><a href="#cb25-78" aria-hidden="true" tabindex="-1"></a>        pass_corr <span class="op">=</span> corr_mae_mean <span class="op">&lt;</span> mae_tolerance</span>
+<span id="cb25-79"><a href="#cb25-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-80"><a href="#cb25-80" aria-hidden="true" tabindex="-1"></a>        evaluations[name] <span class="op">=</span> {</span>
+<span id="cb25-81"><a href="#cb25-81" aria-hidden="true" tabindex="-1"></a>            <span class="st">'gt_marginals'</span>: np.array(gt_marginals),</span>
+<span id="cb25-82"><a href="#cb25-82" aria-hidden="true" tabindex="-1"></a>            <span class="st">'gt_correlations'</span>: np.array(gt_correlations),</span>
+<span id="cb25-83"><a href="#cb25-83" aria-hidden="true" tabindex="-1"></a>            <span class="st">'baseline_marginals'</span>: np.array(baseline_marginals),</span>
+<span id="cb25-84"><a href="#cb25-84" aria-hidden="true" tabindex="-1"></a>            <span class="st">'baseline_correlations'</span>: np.array(baseline_correlations),</span>
+<span id="cb25-85"><a href="#cb25-85" aria-hidden="true" tabindex="-1"></a>            <span class="st">'learned_marginals_all'</span>: np.array(learned_marginals),</span>
+<span id="cb25-86"><a href="#cb25-86" aria-hidden="true" tabindex="-1"></a>            <span class="st">'learned_correlations_all'</span>: np.array(learned_correlations),</span>
+<span id="cb25-87"><a href="#cb25-87" aria-hidden="true" tabindex="-1"></a>            <span class="st">'learned_marginals_mean'</span>: np.array(jnp.mean(learned_marginals, axis<span class="op">=</span><span class="dv">0</span>)),</span>
+<span id="cb25-88"><a href="#cb25-88" aria-hidden="true" tabindex="-1"></a>            <span class="st">'learned_correlations_mean'</span>: np.array(jnp.mean(learned_correlations, axis<span class="op">=</span><span class="dv">0</span>)),</span>
+<span id="cb25-89"><a href="#cb25-89" aria-hidden="true" tabindex="-1"></a>            <span class="st">'marg_mae_per_seed'</span>: np.array(marg_mae_per_seed),</span>
+<span id="cb25-90"><a href="#cb25-90" aria-hidden="true" tabindex="-1"></a>            <span class="st">'corr_mae_per_seed'</span>: np.array(corr_mae_per_seed),</span>
+<span id="cb25-91"><a href="#cb25-91" aria-hidden="true" tabindex="-1"></a>            <span class="st">'marg_mae_mean'</span>: marg_mae_mean,</span>
+<span id="cb25-92"><a href="#cb25-92" aria-hidden="true" tabindex="-1"></a>            <span class="st">'marg_mae_std'</span>: marg_mae_std,</span>
+<span id="cb25-93"><a href="#cb25-93" aria-hidden="true" tabindex="-1"></a>            <span class="st">'corr_mae_mean'</span>: corr_mae_mean,</span>
+<span id="cb25-94"><a href="#cb25-94" aria-hidden="true" tabindex="-1"></a>            <span class="st">'corr_mae_std'</span>: corr_mae_std,</span>
+<span id="cb25-95"><a href="#cb25-95" aria-hidden="true" tabindex="-1"></a>            <span class="st">'baseline_marg_mae'</span>: baseline_marg_mae,</span>
+<span id="cb25-96"><a href="#cb25-96" aria-hidden="true" tabindex="-1"></a>            <span class="st">'baseline_corr_mae'</span>: baseline_corr_mae,</span>
+<span id="cb25-97"><a href="#cb25-97" aria-hidden="true" tabindex="-1"></a>            <span class="st">'pass_marg'</span>: pass_marg,</span>
+<span id="cb25-98"><a href="#cb25-98" aria-hidden="true" tabindex="-1"></a>            <span class="st">'pass_corr'</span>: pass_corr,</span>
+<span id="cb25-99"><a href="#cb25-99" aria-hidden="true" tabindex="-1"></a>            <span class="st">'mae_tolerance'</span>: mae_tolerance,</span>
+<span id="cb25-100"><a href="#cb25-100" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb25-101"><a href="#cb25-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-102"><a href="#cb25-102" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  Marginal MAE (mean±std):    </span><span class="sc">{</span>marg_mae_mean<span class="sc">:.4f}</span><span class="ss"> ± </span><span class="sc">{</span>marg_mae_std<span class="sc">:.4f}</span><span class="ss">  | pass&lt;</span><span class="sc">{</span>mae_tolerance<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>pass_marg<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb25-103"><a href="#cb25-103" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  Correlation MAE (mean±std): </span><span class="sc">{</span>corr_mae_mean<span class="sc">:.4f}</span><span class="ss"> ± </span><span class="sc">{</span>corr_mae_std<span class="sc">:.4f}</span><span class="ss">  | pass&lt;</span><span class="sc">{</span>mae_tolerance<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>pass_corr<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb25-104"><a href="#cb25-104" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  Untrained baseline MAE:     marg=</span><span class="sc">{</span>baseline_marg_mae<span class="sc">:.4f}</span><span class="ss">, corr=</span><span class="sc">{</span>baseline_corr_mae<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb25-105"><a href="#cb25-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-106"><a href="#cb25-106" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> evaluations</span>
+<span id="cb25-107"><a href="#cb25-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-108"><a href="#cb25-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-109"><a href="#cb25-109" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_generative_proof(evaluations):</span>
+<span id="cb25-110"><a href="#cb25-110" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb25-111"><a href="#cb25-111" aria-hidden="true" tabindex="-1"></a><span class="co">    For each scenario, create a 2-panel plot comparing learned mean vs ground truth,</span></span>
+<span id="cb25-112"><a href="#cb25-112" aria-hidden="true" tabindex="-1"></a><span class="co">    with an untrained (all-zeros) baseline shown as a dotted reference.</span></span>
+<span id="cb25-113"><a href="#cb25-113" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb25-114"><a href="#cb25-114" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(evaluations)</span>
+<span id="cb25-115"><a href="#cb25-115" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(n, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span> <span class="op">*</span> n))</span>
+<span id="cb25-116"><a href="#cb25-116" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb25-117"><a href="#cb25-117" aria-hidden="true" tabindex="-1"></a>        axes <span class="op">=</span> axes.reshape(<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb25-118"><a href="#cb25-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-119"><a href="#cb25-119" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> idx, (name, data) <span class="kw">in</span> <span class="bu">enumerate</span>(evaluations.items()):</span>
+<span id="cb25-120"><a href="#cb25-120" aria-hidden="true" tabindex="-1"></a>        learned_m <span class="op">=</span> data[<span class="st">'learned_marginals_mean'</span>]</span>
+<span id="cb25-121"><a href="#cb25-121" aria-hidden="true" tabindex="-1"></a>        gt_m <span class="op">=</span> data[<span class="st">'gt_marginals'</span>]</span>
+<span id="cb25-122"><a href="#cb25-122" aria-hidden="true" tabindex="-1"></a>        baseline_m <span class="op">=</span> data[<span class="st">'baseline_marginals'</span>]</span>
+<span id="cb25-123"><a href="#cb25-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-124"><a href="#cb25-124" aria-hidden="true" tabindex="-1"></a>        learned_c <span class="op">=</span> data[<span class="st">'learned_correlations_mean'</span>]</span>
+<span id="cb25-125"><a href="#cb25-125" aria-hidden="true" tabindex="-1"></a>        gt_c <span class="op">=</span> data[<span class="st">'gt_correlations'</span>]</span>
+<span id="cb25-126"><a href="#cb25-126" aria-hidden="true" tabindex="-1"></a>        baseline_c <span class="op">=</span> data[<span class="st">'baseline_correlations'</span>]</span>
+<span id="cb25-127"><a href="#cb25-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-128"><a href="#cb25-128" aria-hidden="true" tabindex="-1"></a>        ax <span class="op">=</span> axes[idx, <span class="dv">0</span>]</span>
+<span id="cb25-129"><a href="#cb25-129" aria-hidden="true" tabindex="-1"></a>        ax.scatter(gt_m, learned_m, s<span class="op">=</span><span class="dv">120</span>, zorder<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb25-130"><a href="#cb25-130" aria-hidden="true" tabindex="-1"></a>                   c<span class="op">=</span><span class="st">'royalblue'</span>, edgecolors<span class="op">=</span><span class="st">'navy'</span>, alpha<span class="op">=</span><span class="fl">0.85</span>, label<span class="op">=</span><span class="st">'Learned (mean across seeds)'</span>)</span>
+<span id="cb25-131"><a href="#cb25-131" aria-hidden="true" tabindex="-1"></a>        ax.plot(gt_m, baseline_m, linestyle<span class="op">=</span><span class="st">':'</span>, marker<span class="op">=</span><span class="st">'x'</span>, markersize<span class="op">=</span><span class="dv">8</span>,</span>
+<span id="cb25-132"><a href="#cb25-132" aria-hidden="true" tabindex="-1"></a>                color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.95</span>, label<span class="op">=</span><span class="st">'Untrained baseline'</span>)</span>
+<span id="cb25-133"><a href="#cb25-133" aria-hidden="true" tabindex="-1"></a>        pad <span class="op">=</span> <span class="fl">0.05</span></span>
+<span id="cb25-134"><a href="#cb25-134" aria-hidden="true" tabindex="-1"></a>        lo <span class="op">=</span> <span class="bu">min</span>(gt_m.<span class="bu">min</span>(), learned_m.<span class="bu">min</span>(), baseline_m.<span class="bu">min</span>()) <span class="op">-</span> pad</span>
+<span id="cb25-135"><a href="#cb25-135" aria-hidden="true" tabindex="-1"></a>        hi <span class="op">=</span> <span class="bu">max</span>(gt_m.<span class="bu">max</span>(), learned_m.<span class="bu">max</span>(), baseline_m.<span class="bu">max</span>()) <span class="op">+</span> pad</span>
+<span id="cb25-136"><a href="#cb25-136" aria-hidden="true" tabindex="-1"></a>        ax.plot([lo, hi], [lo, hi], <span class="st">'k--'</span>, alpha<span class="op">=</span><span class="fl">0.4</span>, label<span class="op">=</span><span class="st">'Perfect match'</span>)</span>
+<span id="cb25-137"><a href="#cb25-137" aria-hidden="true" tabindex="-1"></a>        ax.set_xlim(lo, hi)</span>
+<span id="cb25-138"><a href="#cb25-138" aria-hidden="true" tabindex="-1"></a>        ax.set_ylim(lo, hi)</span>
+<span id="cb25-139"><a href="#cb25-139" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, (x, y) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(gt_m, learned_m)):</span>
+<span id="cb25-140"><a href="#cb25-140" aria-hidden="true" tabindex="-1"></a>            ax.annotate(<span class="ss">f'V</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">'</span>, (x, y), textcoords<span class="op">=</span><span class="st">'offset points'</span>,</span>
+<span id="cb25-141"><a href="#cb25-141" aria-hidden="true" tabindex="-1"></a>                        xytext<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">8</span>), fontsize<span class="op">=</span><span class="dv">9</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb25-142"><a href="#cb25-142" aria-hidden="true" tabindex="-1"></a>        ax.set_xlabel(<span class="st">'Ground Truth  P(venue = +1)'</span>)</span>
+<span id="cb25-143"><a href="#cb25-143" aria-hidden="true" tabindex="-1"></a>        ax.set_ylabel(<span class="st">'Learned / Baseline  P(venue = +1)'</span>)</span>
+<span id="cb25-144"><a href="#cb25-144" aria-hidden="true" tabindex="-1"></a>        ax.set_title(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> — Marginals"</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb25-145"><a href="#cb25-145" aria-hidden="true" tabindex="-1"></a>        ax.legend(fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb25-146"><a href="#cb25-146" aria-hidden="true" tabindex="-1"></a>        ax.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb25-147"><a href="#cb25-147" aria-hidden="true" tabindex="-1"></a>        ax.set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb25-148"><a href="#cb25-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-149"><a href="#cb25-149" aria-hidden="true" tabindex="-1"></a>        ax <span class="op">=</span> axes[idx, <span class="dv">1</span>]</span>
+<span id="cb25-150"><a href="#cb25-150" aria-hidden="true" tabindex="-1"></a>        ax.scatter(gt_c, learned_c, s<span class="op">=</span><span class="dv">120</span>, zorder<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb25-151"><a href="#cb25-151" aria-hidden="true" tabindex="-1"></a>                   c<span class="op">=</span><span class="st">'crimson'</span>, edgecolors<span class="op">=</span><span class="st">'darkred'</span>, alpha<span class="op">=</span><span class="fl">0.85</span>, label<span class="op">=</span><span class="st">'Learned (mean across seeds)'</span>)</span>
+<span id="cb25-152"><a href="#cb25-152" aria-hidden="true" tabindex="-1"></a>        ax.plot(gt_c, baseline_c, linestyle<span class="op">=</span><span class="st">':'</span>, marker<span class="op">=</span><span class="st">'x'</span>, markersize<span class="op">=</span><span class="dv">8</span>,</span>
+<span id="cb25-153"><a href="#cb25-153" aria-hidden="true" tabindex="-1"></a>                color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.95</span>, label<span class="op">=</span><span class="st">'Untrained baseline'</span>)</span>
+<span id="cb25-154"><a href="#cb25-154" aria-hidden="true" tabindex="-1"></a>        lo <span class="op">=</span> <span class="bu">min</span>(gt_c.<span class="bu">min</span>(), learned_c.<span class="bu">min</span>(), baseline_c.<span class="bu">min</span>()) <span class="op">-</span> pad</span>
+<span id="cb25-155"><a href="#cb25-155" aria-hidden="true" tabindex="-1"></a>        hi <span class="op">=</span> <span class="bu">max</span>(gt_c.<span class="bu">max</span>(), learned_c.<span class="bu">max</span>(), baseline_c.<span class="bu">max</span>()) <span class="op">+</span> pad</span>
+<span id="cb25-156"><a href="#cb25-156" aria-hidden="true" tabindex="-1"></a>        ax.plot([lo, hi], [lo, hi], <span class="st">'k--'</span>, alpha<span class="op">=</span><span class="fl">0.4</span>, label<span class="op">=</span><span class="st">'Perfect match'</span>)</span>
+<span id="cb25-157"><a href="#cb25-157" aria-hidden="true" tabindex="-1"></a>        ax.set_xlim(lo, hi)</span>
+<span id="cb25-158"><a href="#cb25-158" aria-hidden="true" tabindex="-1"></a>        ax.set_ylim(lo, hi)</span>
+<span id="cb25-159"><a href="#cb25-159" aria-hidden="true" tabindex="-1"></a>        n_venues <span class="op">=</span> <span class="bu">len</span>(gt_m)</span>
+<span id="cb25-160"><a href="#cb25-160" aria-hidden="true" tabindex="-1"></a>        edge_labels <span class="op">=</span> [<span class="ss">f'(</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">,</span><span class="sc">{</span>j<span class="sc">}</span><span class="ss">)'</span></span>
+<span id="cb25-161"><a href="#cb25-161" aria-hidden="true" tabindex="-1"></a>                       <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_venues)</span>
+<span id="cb25-162"><a href="#cb25-162" aria-hidden="true" tabindex="-1"></a>                       <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(i <span class="op">+</span> <span class="dv">1</span>, n_venues)]</span>
+<span id="cb25-163"><a href="#cb25-163" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, (x, y) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(gt_c, learned_c)):</span>
+<span id="cb25-164"><a href="#cb25-164" aria-hidden="true" tabindex="-1"></a>            ax.annotate(edge_labels[i], (x, y), textcoords<span class="op">=</span><span class="st">'offset points'</span>,</span>
+<span id="cb25-165"><a href="#cb25-165" aria-hidden="true" tabindex="-1"></a>                        xytext<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">8</span>), fontsize<span class="op">=</span><span class="dv">9</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb25-166"><a href="#cb25-166" aria-hidden="true" tabindex="-1"></a>        ax.set_xlabel(<span class="st">'Ground Truth  E[s_i · s_j]'</span>)</span>
+<span id="cb25-167"><a href="#cb25-167" aria-hidden="true" tabindex="-1"></a>        ax.set_ylabel(<span class="st">'Learned / Baseline  E[s_i · s_j]'</span>)</span>
+<span id="cb25-168"><a href="#cb25-168" aria-hidden="true" tabindex="-1"></a>        ax.set_title(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> — Pairwise Correlations"</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb25-169"><a href="#cb25-169" aria-hidden="true" tabindex="-1"></a>        ax.legend(fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb25-170"><a href="#cb25-170" aria-hidden="true" tabindex="-1"></a>        ax.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb25-171"><a href="#cb25-171" aria-hidden="true" tabindex="-1"></a>        ax.set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb25-172"><a href="#cb25-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-173"><a href="#cb25-173" aria-hidden="true" tabindex="-1"></a>    fig.suptitle(</span>
+<span id="cb25-174"><a href="#cb25-174" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Generative Proof — Raw Distribution Learning (No Routing)'</span>,</span>
+<span id="cb25-175"><a href="#cb25-175" aria-hidden="true" tabindex="-1"></a>        fontsize<span class="op">=</span><span class="dv">14</span>,</span>
+<span id="cb25-176"><a href="#cb25-176" aria-hidden="true" tabindex="-1"></a>        fontweight<span class="op">=</span><span class="st">'bold'</span>,</span>
+<span id="cb25-177"><a href="#cb25-177" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="fl">1.02</span></span>
+<span id="cb25-178"><a href="#cb25-178" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb25-179"><a href="#cb25-179" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb25-180"><a href="#cb25-180" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> os</span>
+<span id="cb25-181"><a href="#cb25-181" aria-hidden="true" tabindex="-1"></a>    os.makedirs(<span class="st">'images'</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb25-182"><a href="#cb25-182" aria-hidden="true" tabindex="-1"></a>    filename <span class="op">=</span> <span class="st">'images/generative_proof_results.png'</span></span>
+<span id="cb25-183"><a href="#cb25-183" aria-hidden="true" tabindex="-1"></a>    plt.savefig(filename, bbox_inches<span class="op">=</span><span class="st">'tight'</span>, dpi<span class="op">=</span><span class="dv">150</span>)</span>
+<span id="cb25-184"><a href="#cb25-184" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Saved plot to </span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb25-185"><a href="#cb25-185" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb25-186"><a href="#cb25-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-187"><a href="#cb25-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-188"><a href="#cb25-188" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Run evaluation ──</span></span>
+<span id="cb25-189"><a href="#cb25-189" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span> <span class="op">+</span> <span class="st">"="</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb25-190"><a href="#cb25-190" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"GENERATIVE PROOF — Evaluation"</span>)</span>
+<span id="cb25-191"><a href="#cb25-191" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb25-192"><a href="#cb25-192" aria-hidden="true" tabindex="-1"></a>gen_proof_eval <span class="op">=</span> run_generative_proof_evaluation(</span>
+<span id="cb25-193"><a href="#cb25-193" aria-hidden="true" tabindex="-1"></a>    gen_proof_results,</span>
+<span id="cb25-194"><a href="#cb25-194" aria-hidden="true" tabindex="-1"></a>    gen_config,</span>
+<span id="cb25-195"><a href="#cb25-195" aria-hidden="true" tabindex="-1"></a>    n_eval_samples<span class="op">=</span><span class="dv">1500</span>,</span>
+<span id="cb25-196"><a href="#cb25-196" aria-hidden="true" tabindex="-1"></a>    mae_tolerance<span class="op">=</span><span class="fl">0.08</span>,</span>
+<span id="cb25-197"><a href="#cb25-197" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-198"><a href="#cb25-198" aria-hidden="true" tabindex="-1"></a>plot_generative_proof(gen_proof_eval)</span>
+<span id="cb25-199"><a href="#cb25-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-200"><a href="#cb25-200" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span> <span class="op">+</span> <span class="st">"="</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb25-201"><a href="#cb25-201" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"GENERATIVE PROOF — MAE SUMMARY"</span>)</span>
+<span id="cb25-202"><a href="#cb25-202" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">80</span>)</span>
+<span id="cb25-203"><a href="#cb25-203" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span> <span class="st">'SCENARIO'</span><span class="sc">:&lt;25}</span><span class="ss"> | </span><span class="sc">{</span><span class="st">'MARG_MAE (mean±std)'</span><span class="sc">:&lt;24}</span><span class="ss"> | </span><span class="sc">{</span><span class="st">'CORR_MAE (mean±std)'</span><span class="sc">:&lt;24}</span><span class="ss"> | </span><span class="sc">{</span><span class="st">'PASS'</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb25-204"><a href="#cb25-204" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">95</span>)</span>
+<span id="cb25-205"><a href="#cb25-205" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> scenario_name, data <span class="kw">in</span> gen_proof_eval.items():</span>
+<span id="cb25-206"><a href="#cb25-206" aria-hidden="true" tabindex="-1"></a>    row <span class="op">=</span> (</span>
+<span id="cb25-207"><a href="#cb25-207" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>scenario_name<span class="sc">:&lt;25}</span><span class="ss"> | "</span></span>
+<span id="cb25-208"><a href="#cb25-208" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>data[<span class="st">'marg_mae_mean'</span>]<span class="sc">:.4f}</span><span class="ss">±</span><span class="sc">{</span>data[<span class="st">'marg_mae_std'</span>]<span class="sc">::&lt;14.4f}</span><span class="ss"> | "</span></span>
+<span id="cb25-209"><a href="#cb25-209" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>data[<span class="st">'corr_mae_mean'</span>]<span class="sc">:.4f}</span><span class="ss">±</span><span class="sc">{</span>data[<span class="st">'corr_mae_std'</span>]<span class="sc">::&lt;14.4f}</span><span class="ss"> | "</span></span>
+<span id="cb25-210"><a href="#cb25-210" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span><span class="bu">bool</span>(data[<span class="st">'pass_marg'</span>] <span class="kw">and</span> data[<span class="st">'pass_corr'</span>])<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb25-211"><a href="#cb25-211" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb25-212"><a href="#cb25-212" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(row)</span>
+<span id="cb25-213"><a href="#cb25-213" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+================================================================================
+GENERATIVE PROOF — Evaluation
+================================================================================
+
+Evaluating generative quality: IID Venues
+  Marginal MAE (mean±std):    0.0517 ± 0.0227  | pass&lt;0.08: True
+  Correlation MAE (mean±std): 0.0662 ± 0.0299  | pass&lt;0.08: True
+  Untrained baseline MAE:     marg=0.1529, corr=0.1031
+
+Evaluating generative quality: Correlated Venues
+  Marginal MAE (mean±std):    0.0746 ± 0.0527  | pass&lt;0.08: True
+  Correlation MAE (mean±std): 0.0592 ± 0.0322  | pass&lt;0.08: True
+  Untrained baseline MAE:     marg=0.0918, corr=0.4231
+
+Saved plot to images/generative_proof_results.png</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="synthetic_data_files/figure-html/cell-21-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+================================================================================
+GENERATIVE PROOF — MAE SUMMARY
+================================================================================
+SCENARIO                  | MARG_MAE (mean±std)      | CORR_MAE (mean±std)      | PASS
+-----------------------------------------------------------------------------------------------
+IID Venues                | 0.0517±0.0227:::::::: | 0.0662±0.0299:::::::: | True
+Correlated Venues         | 0.0746±0.0527:::::::: | 0.0592±0.0322:::::::: | True
+===============================================================================================</code></pre>
+</div>
+</div>
 
 
+</section>
 </section>
 </section>
 
