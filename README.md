@@ -45,10 +45,10 @@ By leveraging **conditional (clamped) sampling** with [THRML](https://github.com
 
 | Context Mode | Ctx-ε-Greedy | Ctx-Thompson | THRML |
 |--------------|--------------|--------------|-------|
-| Fixed | 4823.86 | 4532.97 | **3914.27** |
-| Random | 5141.93 | 5000.64 | **3775.45** |
+| Fixed | 5212.60 | 4970.83 | **4023.46** |
+| Random | 5014.34 | 5163.01 | **3279.17** |
 
-**THRML achieves 14-25% regret reduction** compared to state-of-the-art contextual bandit approaches.
+**THRML achieves 19-37% regret reduction** compared to state-of-the-art contextual bandit approaches.
 
 ---
 
