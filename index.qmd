@@ -1,7 +1,7 @@
 ---
 title: "[Conditional Inference for Financial Order Routing Using Energy-Based Models](index.qmd)"
 author: "Bruna Moema"
-date: "February 19, 2026"
+date: "February 27, 2026"
 title-block-banner: true
 ---
 
@@ -15,14 +15,13 @@ Financial order routing presents a fundamental decision problem: given multiple 
 
 ### The Multi-Venue Challenge and Opportunity {#challenge}
 
-Modern financial markets are fragmented across numerous trading venues. In cryptocurrency markets alone, traders must choose between dozens of exchanges, each with different liquidity profiles, fee structures, and momentary execution quality. The optimal venue changes over time, creating a learning problem that traditional approaches model as a multi-armed bandit. However, standard bandit algorithms treat each venue as independent. In reality, venues are often correlated: a favorable price movement on one exchange tends to predict similar movements on others due to arbitrage activity and shared market microstructure.
+Modern financial markets are fragmented across numerous trading venues. In cryptocurrency markets alone, traders must choose between dozens of exchanges, each with different liquidity profiles, fee structures, and momentary execution quality. The optimal venue changes over time, creating a learning problem that traditional approaches model as a multi-armed bandit. However, standard bandit algorithms treat each venue as independent. In reality, venue execution outcomes exhibit competitive structure: when one exchange offers the best price at a given moment, others are necessarily suboptimal. Modeling these pairwise outcome relationships, rather than treating each venue independently, can yield better routing decisions.
 
 Consider a scenario where, before making a routing decision, the trader can observe the most recent trade outcomes at a subset of venues (the "context venues"). Given a model that captures cross-venue correlations, this context can be used to make better predictions about unobserved venues. This is precisely where **conditional inference** becomes powerful. Traditional contextual bandits fail to fully exploit this structure because they treat each context as a separate learning problem, do not model the generative process that creates correlations, and cannot perform principled belief propagation across venues.
 
 ### The Proposed Approach: THRML and Energy-Based Models {#approach}
 
 This work proposes modeling the multi-venue system as an **Ising Energy-Based Model (EBM)**, where:
-
 
 
 - Each venue is represented as a node (spin) in a graph
@@ -46,7 +45,7 @@ The main contributions of this work are:
 
 2. **THRML-based agent design**: An agent is implemented that uses Ising EBM structure with clamped sampling to perform conditional inference over venue states, optimized for JAX accelerators.
 
-3. **Empirical validation**: Evaluation results demonstrate on both synthetic (N=3) and real cryptocurrency market data (N=3) that THRML achieves lower regret compared to state-of-the-art contextual bandit baselines.
+3. **Empirical validation**: Evaluation results demonstrate on both synthetic (N=3) and real cryptocurrency market data (N=3) that THRML achieves lower regret compared to state-of-the-art contextual bandit baselines in the majority of scenarios, particularly during regime shifts and fixed-context conditions.
 
 4. **Hardware relevance**: The proposed approach is designed to be compatible with future Extropic thermodynamic hardware, which promises up to 10,000× energy efficiency improvements [^1] for probabilistic sampling workloads.
 
@@ -97,9 +96,9 @@ This section formally defines the conditional routing problem and contrasts it w
 
 Consider a market with $n$ trading venues. At each time step $t$:
 
-1. **Environment**: The market generates a joint outcome vector $\mathbf{o}_t \in \{-1, +1\}^n$. We specifically model a competitive execution setting where exactly one venue provides a favorable outcome ($+1$) per time step, and all others are unfavorable ($-1$).
+1. **Environment**: The market generates a joint outcome vector $\mathbf{o}_t \in \{-1, +1\}^n$. We specifically model a competitive execution setting where exactly one venue is labeled as favorable ($+1$) per time step (with random tie-breaking when multiple venues share the best outcome), and all others are unfavorable ($-1$).
 
-2. **Context observation**: The agent observes a set of "context venues" $\mathcal{C}_t \subset \{1, \ldots, n\}$ and their outcomes $\mathbf{o}_{t,\mathcal{C}_t}$ by reading the venue's public market data feed (e.g., order book updates). This is the partial information available before routing.
+2. **Context observation**: The agent observes the outcomes of a set of "context venues" $\mathcal{C}_t \subset \{1, \ldots, n\}$, denoted $\mathbf{o}_{t,\mathcal{C}_t}$. In the experimental setup, the context is the realized outcome label ($\pm 1$) of the context venue(s) for the current time step. This represents the partial information available to inform routing.
 
 3. **Routing decision**: Based on the context, the agent selects a venue $a_t \in \{1, \ldots, n\} \setminus \mathcal{C}_t$ to route its order[^3].
 
@@ -124,7 +123,7 @@ Two context observation protocols are considered:
 ## Methodology: Agent Design {#methodology}
 
 ### Baseline Agents: Contextual Bandits {#baselines}
-Two baseline agents are implemented for comparison. Since the environment consists of **discrete context states** and **binary success/failure rewards**, we employ tabular bandit approaches:
+Two baseline agents are implemented for comparison. Since the environment consists of **discrete context states** and **binary success/failure rewards**, we employ tabular bandit approaches[^8]:
 
 - **Contextual ε-Greedy**: Maintains context-specific success/count statistics with ε=0.1 exploration and a discount factor for adaptation.
 - **Contextual Thompson Sampling (CTS)**: Uses Beta-distributed posteriors for each context-venue pair, sampling from $Beta(\alpha, \beta)$ to make routing decisions, and applies a discount factor for adaptation.
@@ -132,9 +131,9 @@ Two baseline agents are implemented for comparison. Since the environment consis
 ### THRML Agent: Conditional Ising Inference {#ising-inference}
 The THRML agent models the venue system as an Ising EBM and uses clamped sampling for conditional inference.
 
-**Selection via clamping**: Given context venues $\mathcal{C}$ with outcomes $\mathbf{o}_{\mathcal{C}}$, the agent constructs an `IsingEBM`, clamps the context nodes to their observed states, and uses THRML's `sample_states` to draw samples from $P(X_{\text{free}} | X_{\mathcal{C}} = \mathbf{o}_{\mathcal{C}})$. The update rule also incorporates a mean-field signal propagation mechanism (propagation_damping=0.3) that accelerates belief diffusion across the graph. The full bias update at each step is: $\mathbf{b}_{new} \leftarrow \gamma \, \mathbf{b}_{old} + \eta \beta (\mathbf{x}_{obs} - \hat{\mathbf{x}}_{obs}) + \delta \cdot \eta \beta (J \cdot \mathbf{x}_{obs})(1 - m_{obs})$, where $\gamma$ is the discount factor, $\eta$ is the learning rate, $\mathbf{x}_{obs}$ and $\hat{\mathbf{x}}_{obs}$ are the data and model node moments at observed positions (the contrastive divergence term), and $\delta$ is the propagation damping coefficient that propagates information from clamped nodes to free nodes via the coupling matrix $J$.
+**Selection via clamping**: Given context venues $\mathcal{C}$ with outcomes $\mathbf{o}_{\mathcal{C}}$, the agent constructs an `IsingEBM`, clamps the context nodes to their observed states, and uses THRML's `sample_states` to draw samples from $P(X_{\text{free}} | X_{\mathcal{C}} = \mathbf{o}_{\mathcal{C}})$. The update rule also incorporates a mean-field signal propagation mechanism (propagation_damping=0.3) that accelerates belief diffusion across the graph. The full bias update at each step is: $\mathbf{b}_{new} \leftarrow \gamma \, \mathbf{b}_{old} + \eta \beta (\mathbf{x}_{obs} - \hat{\mathbf{x}}_{obs}) \odot m_{obs} + \delta \cdot \eta \beta (J \cdot \mathbf{x}_{obs})(1 - m_{obs})$, where $\gamma$ is the discount factor, $\eta$ is the learning rate, $\mathbf{x}_{obs}$ and $\hat{\mathbf{x}}_{obs}$ are the data and model node moments at observed positions (the contrastive divergence term), $\delta$ is the propagation damping coefficient that propagates information from clamped nodes to free nodes via the coupling matrix $J$, and $m_{obs}$ is a binary mask indicating which venues were observed.
 
-**Implementation optimization**: To maintain high throughput, the implementation utilizes "Static Infrastructure Pre-building" (`build_thrml_infra`). For general cases (like the synthetic experiments), the agent uses **dynamic node permutation** to map context nodes to the model's first $K$ indices. In the specific case of real-world experiments (N=3), the implementation leverages an optimized branching strategy (using `lax.switch`) to select among pre-computed graph topologies and schedules. While the current implementation re-binds the program wrapper per-step to pass updated model parameters into the sampling loop, it avoids the overhead of re-generating the underlying graph connectivity and block schedules.
+**Implementation optimization**: To maintain high throughput, the implementation utilizes "Static Infrastructure Pre-building" (`build_thrml_infra`). For general cases (like the synthetic experiments), the agent uses **dynamic node permutation** to map context nodes to the model's first $K$ indices, and re-creates the program wrapper per-step to pass updated model parameters into the sampling loop while reusing the pre-built graph connectivity and block schedules. In the specific case of real-world experiments (N=3), the implementation leverages an optimized branching strategy (using `lax.switch`) to select among pre-computed graph topologies and schedules, avoiding the need for dynamic permutation entirely.
 
 ---
 
@@ -151,33 +150,34 @@ The synthetic experiments serve as a theoretical validation to confirm that the 
 
 - 3 venues, 10,000 time steps per run
 - 200 independent seeds for statistical significance
-- Adaptation rate $\alpha = 0.05$ (`learning_rate`), discount factor 0.995, and coupling decay 0.995.
+- Adaptation rate $\eta = 0.05$ (`learning_rate`), discount factor 0.995, and coupling decay 0.995.
 - THRML precision: `n_warmup=50`, `n_samples=100`, `steps_per_sample=4`.
+- ε-Greedy exploration rate: $\varepsilon = 0.1$.
 
 **Results – Fixed Context Mode (K=1):**
 
-| Scenario | Ctx-ε-Greedy | Ctx-Thompson | THRML-Cond | THRML Benefit |
-|----------|--------------|--------------|------------|----------------|
+| Scenario | Contextual ε-Greedy | Contextual Thompson Sampling | THRML | THRML Benefit |
+|----------|---------------------|------------------------------|-------|----------------|
 | IID Venues | 0.00 | 0.00 | 0.00 | **Tie (Optimal)** |
 | Correlated | 206.40 | 5.99 | **2.21** | **Win** |
 | Regime Shift | 2520.47 | 3555.48 | **2154.07** | **Win (-39%)** |
 
 *Table 1: Mean cumulative regret in Fixed Context mode (N=3, K=1) after 10,000 steps. Zero regret in IID/Fixed signals that the optimal venue was always the context venue, resulting in a competitively forced zero-regret outcome for all agents.*
 
-![Cumulative regret in Fixed Context mode. From left to right: IID, Correlated, and Regime Shift scenarios.](experiments/synthetic_data_files/figure-html/cell-17-output-2.png)
+![Cumulative regret in Fixed Context mode. From left to right: IID, Correlated, and Regime Shift scenarios.](experiments/images/conditional_sor_fixed_results.png)
 
 
 **Results – Random Context Mode (K=1):**
 
-| Scenario | Ctx-ε-Greedy | Ctx-Thompson | THRML-Cond | THRML Benefit |
-|----------|--------------|--------------|------------|----------------|
+| Scenario | Contextual ε-Greedy | Contextual Thompson Sampling | THRML | THRML Benefit |
+|----------|---------------------|------------------------------|-------|----------------|
 | IID Venues | 664.12 | 12.84 | **0.96** | **Win** |
-| Correlated | 1897.93 | **1416.11** | 1418.24 | Competitive |
+| Correlated | 1897.93 | **1416.11** | 1418.24 | Competitive (CTS +0.15%) |
 | Regime Shift | 2052.62 | 2596.88 | **1444.48** | **Win (-44%)** |
 
 *Table 2: Mean cumulative regret in Random Context mode (N=3, K=1) after 10,000 steps.*
 
-![Cumulative regret in Random Context mode. From left to right: IID, Correlated, and Regime Shift scenarios.](experiments/synthetic_data_files/figure-html/cell-18-output-2.png)
+![Cumulative regret in Random Context mode. From left to right: IID, Correlated, and Regime Shift scenarios.](experiments/images/conditional_sor_random_results.png)
 
 
 **Summary of Synthetic Findings:**
@@ -195,7 +195,7 @@ The synthetic experiments serve as a theoretical validation to confirm that the 
 
 #### Generative Verification: Parameter Recovery
 
-Beyond minimizing regret, a key theoretical claim is that the THRML agent approximates the underlying energy landscape of the system. To verify this, a **Generative Proof** experiment was performed where a fresh THRML agent (no carryover from routing) was trained on the full, unmasked raw Ising outcomes to reconstruct the ground-truth Hamiltonian. This experiment used a **static configuration** (discount factor $\gamma=1.0$, coupling decay $\lambda=1.0$) to isolate the agent's capacity for stationary parameter recovery. The Regime Shift scenario is intentionally excluded, as its non-stationarity precludes a meaningful steady-state ground truth comparison.
+Beyond minimizing regret, a key theoretical claim is that the THRML agent approximates the underlying energy landscape of the system. To verify this, a **Generative Proof** experiment was performed as a **separate capacity test**, distinct from the routing regime. A fresh THRML agent (no carryover from routing) was trained on the **full, unmasked raw Ising outcomes**, meaning all node outcomes were revealed at every step, providing complete supervision. This contrasts with the routing experiment, where the agent observes only the context venue(s) and the single selected venue per step, operating under partial observability. The generative proof therefore establishes an **ideal-case upper bound** on THRML's parameter recovery capability: it demonstrates that, given full information, the model can recover the ground-truth Hamiltonian, while routing performance reflects the harder partially-observed regime. This experiment used a **static configuration** (discount factor $\gamma=1.0$, coupling decay $\lambda=1.0$) to isolate the agent's capacity for stationary parameter recovery under full supervision. The Regime Shift scenario is intentionally excluded, as its non-stationarity precludes a meaningful steady-state ground truth comparison.
 
 The results[^7] demonstrate that the agent recovers the system's structure, as measured by the Mean Absolute Error (MAE) between sampled and ground-truth distributions (mean ± SD across 64 seeds, pass threshold: MAE $< 0.08$):
 
@@ -205,49 +205,134 @@ The results[^7] demonstrate that the agent recovers the system's structure, as m
 
 ![Generative Proof: Raw Distribution Learning (No Routing): Comparison of learned vs. ground truth marginals and pairwise correlations for IID and Correlated venue scenarios.](experiments/images/generative_proof_results.png)
 
+
+#### Ablation Study: Mechanism Analysis
+
+To understand which THRML mechanisms drive performance gains, an ablation study was conducted in the Correlated Venues and Regime Shift scenarios (Fixed Context mode, 200 seeds). Each variant disables exactly one component of the full agent:
+
+- **THRML-NoClamping**: Disables conditional inference (uses unclamped joint program).
+- **THRML-NoCouplings**: Disables pairwise edge couplings (no correlation mapping).
+- **THRML-NoDamping**: Disables mean-field graph propagation.
+
+**Results:**
+
+| Scenario | THRML-Full | NoClamping | NoCouplings | NoDamping |
+|----------|------------|------------|-------------|-----------|
+| Correlated Venues | **2.21** | 465.50 | 848.18 | 78.33 |
+| Regime Shift | 2154.07 | 2376.46 | 2494.31 | **2122.95** |
+
+*Table 3: Mean cumulative regret for THRML ablation variants after 10,000 steps.*
+
+![Ablation Study Results: Correlated Venues and Regime Shift](experiments/images/ablation_study.png)
+
+**Summary of Ablation Findings:**
+
+1. **Clamping and Couplings are Essential**: Disabling either clamping or couplings in the Correlated scenario causes regret to drastically increase (from 2.21 up to 465-848), demonstrating that the algorithm intrinsically relies on both observing the context and leveraging correlation rules to infer the target venue.
+2. **Damping Accelerates Steady-State Learning**: In the Correlated Venues scenario, disabling damping increases regret (78.33), highlighting the positive impact of mean-field signal propagation when tracking stable correlations. However, in the Regime Shift scenario, `NoDamping` achieved marginally lower regret (2122.95 vs 2154.07), suggesting that dampening slightly slows down adaptation when old beliefs must be discarded in favor of new environmental states.
+
+#### Sampling Budget Sweep
+
+To characterize the regret-compute tradeoff, a sweep over the number of Gibbs samples (`n_samples` $\in \{10, 25, 50, 100, 200\}$) was performed in the Correlated Venues scenario (Fixed Context). This is directly relevant to anticipating performance against hardware resource scaling and constraints such as bounds on physical sampling throughput.
+
+**Results:**
+
+| Samples (`n_samples`) | 10 | 25 | 50 | 100 | 200 |
+|-----------------------|----|----|----|-----|-----|
+| Cumulative Regret | 8.77 | 3.58 | 2.69 | 2.31 | **1.97** |
+
+*Table 4: Regret vs Sampling Budget in Correlated Venues scenario. For this sweep, warmup steps are scaled proportionally ($n_{warmup} = \max(5, n_{samples}/4)$) to maintain compute fairness, explaining the minor deviation from Table 1 results where $n_{warmup}$ was fixed at 50.*
+
+![Sampling Budget Sweep Results](experiments/images/budget_sweep.png)
+
+**Summary of Budget Sweep Findings:**
+-   Regret monotonically decreases as the sample budget increases.
+-   The model exhibits diminishing performance returns beyond `n_samples = 100` (e.g., dropping only slightly from 2.31 to 1.97 when doubling to 200 samples). This implies that a modest 100-sample limit efficiently approximates the Boltzmann distribution required for accurate venue routing in this 3-venue market state constraint.
+
+#### Temperature ($\beta$) Sensitivity Sweep
+
+The impact of the THRML agent's inverse temperature parameter ($\beta$) was analyzed across the Correlated Venues and Regime Shift environments. In this sweep, the environment's data-generating process uses a fixed $\beta=1.0$, and only the agent's inference $\beta$ is varied. This isolates the effect of the agent's distributional sharpness on routing performance: low $\beta$ (hot) produces a flat, exploratory distribution over venue states, while high $\beta$ (cold) concentrates probability mass on the lowest-energy configuration.
+
+**Results:**
+
+| Scenario \ $\beta$ | 0.1 | 0.5 | 1.0 | 2.0 | 5.0 |
+|--------------------|-----|-----|-----|-----|-----|
+| Correlated Venues  | 1585.96 | 124.82 | 2.21 | **1.26** | 1.88 |
+| Regime Shift       | 4229.69 | 2163.20 | **2154.07** | 2261.56 | 3261.55 |
+
+*Table 5: Cumulative Regret vs Inverse Temperature ($\beta$).*
+
+![Temperature Sensitivity Sweep Results](experiments/images/beta_sweep.png)
+
+**Summary of Sensitivity Findings:**
+
+-   **High Entropic Exploration is Deficient**: A "hot" system configuration (e.g., $\beta=0.1$) causes excessive probabilistic exploration and significantly harms exploitation accuracy, returning elevated regret in all tests (1585-4229).
+-   **The Optimality Sweet-Spot**: The most efficient inference is achieved around $\beta=1.0$ to $\beta=2.0$. In dynamic environments like the Regime Shift scenario, overly deterministic exploitation resulting from excessive "cold" states (e.g., $\beta=5.0$) actually degrades performance (increasing regret to ~3262), because distributions that are excessively sharp prevent optimal exploration and adaptivity trailing market disruptions.
+
 ### Real-World Data Experiments {#real-world}
 
-Evaluation is performed on aligned trade data from Coinbase, Kraken, and Bitstamp (N=3, K=1).
+Evaluation is performed on trade data from Coinbase, Kraken, and Bitstamp (N=3, K=1), using forward-filling and backward-filling (`ffill().bfill()`) for missing time buckets within the window, and holding the cross-venue median price strictly as a fail-safe fallback for venues entirely lacking trades within the rolling window.
 
 **Experimental Setup:**
 
-- **Data Acquisition**: A rolling window mechanism fetches the most recent 10,000 seconds of trade data to ensure relevance to current market conditions[^5].
-- **10,000 time steps** of aligned market data captured from this window.
-- **200 independent runs** to ensure reproducible statistics[^6].
-- Adaptation rate $\alpha = 0.05$ (`learning_rate`), discount factor 0.995, and coupling decay 0.995.
-- THRML precision: `n_warmup=50`, `n_samples=100`, `steps_per_sample=4`.
+-   **Data Acquisition**: A rolling window mechanism fetches the most recent 10,000 seconds of trade data to ensure relevance to current market conditions[^5].
+-   **10,000 time steps** of aligned market data captured from this window (run: 2026-02-27 11:16:42–14:03:22 UTC).
+-   **200 independent runs** performed on a rolling-window data capture (note that results vary over time)[^6].
+-   Adaptation rate $\eta = 0.05$ (`learning_rate`), discount factor 0.995, and coupling decay 0.995.
+-   THRML precision: `n_warmup=50`, `n_samples=100`, `steps_per_sample=4`.
+-   ε-Greedy exploration rate: $\varepsilon = 0.1$.
 
 **Results – Real Market Data:**
 
 | Context Mode | Contextual ε-Greedy | Contextual Thompson Sampling | THRML     |
 |--------------|---------------------|------------------------------|-----------|
-| Fixed        | 4823.86             | 4532.97                      | 3914.27   |
-| Random       | 5141.93             | 5000.64                      | 3775.45   |
+| Fixed        | 5212.60             | 4970.83                      | 4023.46   |
+| Random       | 5014.34             | 5163.01                      | 3279.17   |
 
 ![Cumulative Regret: Fixed Context (Real Data)](experiments/real_data_files/figure-html/cell-16-output-2.png)
 
 ![Cumulative Regret: Random Context (Real Data)](experiments/real_data_files/figure-html/cell-16-output-4.png)
  
- *Table 3: Cumulative regret on real cryptocurrency data (200 seeds).*
+ *Table 6: Cumulative regret on real cryptocurrency data (200 seeds).*
  
  **Summary of Real-World Findings:**
  
- 1.  **Consistent Superiority**: THRML outperformed both Contextual $\epsilon$-Greedy and Contextual Thompson Sampling significantly in both context modes. The 14-25% reduction in regret validates that the Ising-based conditional inference successfully captures real market micro-correlations. The superior performance of THRML highlights the cost of the independence assumption inherent in standard tabular approaches.
+ 1.  **Consistent Superiority**: THRML outperformed both Contextual $\epsilon$-Greedy and Contextual Thompson Sampling significantly in both context modes. Specifically, THRML achieved an approximate **19% reduction in regret** against Thompson Sampling in Fixed Mode, and a **37% reduction** in Random Mode. This validates that the Ising-based conditional inference successfully captures the competitive outcome structure between venues. The superior performance of THRML highlights the cost of the independence assumption inherent in standard tabular approaches.
  
- 2.  **Validation of Synthetic Trends**: The performance gap mirrors the "Regime Shift" scenario from the synthetic experiments. This suggests that real cryptocurrency markets exhibit the kind of non-stationary, correlated behavior that the THRML agent is specifically designed to exploit.
+ 2.  **Validation of Synthetic Trends**: The steep, stair-stepping behavior in the regret plots perfectly mirrors the non-stationary "Regime Shift" scenario from the synthetic experiments (where individual venue biases suddenly invert). This confirms that real cryptocurrency trade data exhibits dynamic, shifting correlation profiles that the thermodynamic agent's `coupling_decay` mechanism is uniquely equipped to handle.
  
- 3.  **Efficiency in Dynamic Environments**: In the "Random Context" mode, where the agent must generalize from a constantly changing partial view of the market, THRML achieved its lowest absolute regret (3775.45). This highlights the strength of the energy-based model: it builds a global representation of the system's correlations, allowing it to perform strong inference regardless of which specific node is clamped as the context.
+ 3.  **Maximum Efficiency in Dynamic Environments**: In the "Random Context" mode, where the agent must generalize from a constantly changing partial view of the market, ε-Greedy showed only marginal improvement over Fixed mode (5014 vs 5213), while Thompson Sampling marginally worsened (5163 vs 4971). In contrast, THRML's regret significantly *decreased* to 3279.17 in Random mode (vs 4023.46 in Fixed), widening its advantage over all baselines. This highlights the fundamental strength of the energy-based model: it builds a global representation of the system's correlations, allowing it to perform strong, robust inference regardless of which specific node is clamped as the context.
+
+#### Generative Inference Proof: Thermodynamic Synthesis of Markets
+
+To further validate that the THRML routing agent is not merely learning a black-box value function, but physically constructing a structural representation of the venue outcome distribution, a structural analysis of the learned parameter matrices was performed post-simulation. The final coupling weights ($J$) and biases ($h$) learned by the agent during the Random Context experiment (averaged across the 200 seeds from that run) were extracted and frozen.
+
+An unclamped Gibbs sampling procedure generating 5,000 decorrelated samples (with 100 warmup sweeps and `steps_per_sample=4`) was subsequently executed over this static Ising configuration to observe the properties of the learned equilibrium distribution. The correlation matrix of these generated thermodynamic market states was then compared against the empirical correlation matrix computed from the same CCXT trade data used for training.
+
+**Results:**
+
+The analysis yielded a **Correlation Matrix MSE of 0.0151** and **MAE of 0.0932** between the real and synthetic correlation matrices. Furthermore, the marginal probability recovery achieved an **MAE of 0.0885** and **MSE of 0.0143**. The empirical correlation matrix was computed from CCXT trade data used for training.
+
+![Proof of Generative Model: Thermodynamic Synthesis of Financial Markets](experiments/images/generative_ai_heatmap.png) 
+*Figure 9: Comparison of the ground-truth CCXT venue correlation signals vs. the synthetic distribution generated strictly from the agent's learned Hamiltonian parameters post-simulation.*
+
+**Interpretation of Results:**
+The heatmaps successfully validate THRML's dual capability as both a routing agent and a **generative model** for financial markets.
+
+-   **Structural Preservation:** The unclamped Gibbs sampling generated synthetic market states that preserved the underlying negative correlation structure of the real trade data. The sign of all pairwise correlations between exchanges was correctly reproduced in the synthetic distribution, although the model underestimates their magnitudes, as shown in the heatmap comparison.
+-   **Thermodynamic Regularization:** The thermodynamic agent tends to "soften" the most extreme empirical correlations. This highlights the natural regularization effect of the Energy-Based Model's coupling decay. By not perfectly memorizing the extreme empirical noise of the training window, the model learns a smoother, more robust generative distribution of the macroscopic market behavior.
+
+This demonstrates that the agent builds an interpretable generative distribution of its environment with correct qualitative structure, representing a meaningful step toward trustworthy high-frequency financial modeling.
 
 ---
 
 ## Conclusion {#conclusion}
 
 This study has demonstrated that **conditional inference using energy-based models greatly improves order routing in correlated multi-venue environments**. Framing the routing problem as conditional inference over an Ising model, and leveraging THRML's clamped sampling capabilities, enables significant regret reduction compared to state-of-the-art contextual bandit approaches.
- 
+
 The results are conclusive:
 
-1. **Synthetic Benchmarks**: THRML matched optimal baselines in IID settings and reduced regret by ~40% in complex, non-stationary correlation environments.
-2. **Real-World Validation**: On trade data from Coinbase, Kraken, and Bitstamp, THRML consistently outperformed Thompson Sampling by 14-25%.
+1. **Synthetic Benchmarks**: THRML matched or outperformed optimal baselines in IID settings and reduced regret by ~40% in complex, non-stationary correlation environments.
+2. **Real-World Validation**: On trade data from Coinbase, Kraken, and Bitstamp, THRML consistently outperformed Thompson Sampling by 19-37%.
  
    By effectively modeling the "thermodynamics" of market correlations, the THRML agent turns partial information into a competitive advantage, offering a promising new direction for smart order routing in fragmented financial markets.
 
@@ -258,9 +343,9 @@ The results are conclusive:
 
 [^3]: Context venues are excluded from the action set to enforce a generalization task. The objective is to test the agent's ability to infer the state of unobserved venues via learned correlations, rather than simply exploiting the visible information in the context window.
 
-[^4]: This work addresses the problem of execution uncertainty. We consider settings where the market/venue state is partially observed or stochastic (e.g., dark pools or rapidly changing order books), so the agent must learn probabilistic execution outcomes, rather than optimizing against a single static snapshot.
+[^4]: This work addresses the problem of execution uncertainty. We consider settings where the market/venue state is partially observed or stochastic, so the agent must learn probabilistic execution outcomes, rather than optimizing against a single static snapshot.
  
- [^5]: The provided research notebook defaults to a live rolling window. The results presented here are from a fixed archival snapshot (1770037944132 to 1770047944132, February 2, 2026) to ensure consistent comparison.
+ [^5]: The provided research notebook utilizes a live rolling window. Therefore, results from individual notebook executions will vary depending on the execution time and will show deviations from the statistics reported in this article.
  
  [^6]: Processed in batches of 50 seeds to manage GPU memory constraints, distinct from the fully parallelized synthetic execution.
 
@@ -272,5 +357,9 @@ The results are conclusive:
 4. **Ising Model**: Ising, E. (1925). "Beitrag zur Theorie des Ferromagnetismus." *Zeitschrift für Physik*, 31(1), 253-258.
 5. **Reinforcement Learning**: Sutton, R. S., & Barto, A. G. (2018). *Reinforcement Learning: An Introduction*. MIT Press. (For $\epsilon$-Greedy and general bandit formulation).
 6. **Contextual Thompson Sampling**: Agrawal, S., & Goyal, N. (2013). "Thompson Sampling for Contextual Bandits with Linear Payoffs." *International Conference on Machine Learning (ICML)*.
+7. **CCXT Library**: "CCXT – CryptoCurrency eXchange Trading Library." [https://github.com/ccxt/ccxt](https://github.com/ccxt/ccxt)
+8. **Contrastive Divergence**: Hinton, G. E. (2002). "Training products of experts by minimizing contrastive divergence." *Neural Computation*, 14(8), 1771-1800.
 
 [^7]: Results are reported as mean ± SD across 64 independent seeds. Due to the stochastic nature of Gibbs sampling, exact values may vary between experimental runs.
+
+[^8]: Learning Update Scope: Baseline agents update their statistics only on the single selected venue's outcome per step. THRML, by contrast, performs joint contrastive divergence updates on all observed nodes: both the context venue(s) and the selected (routed) venue. This asymmetry reflects each algorithm's natural learning structure: tabular bandits are inherently per-arm, while THRML's Ising model requires multi-node observations to learn correlations. This difference is consistent across both synthetic and real-data experiments.

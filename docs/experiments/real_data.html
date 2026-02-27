@@ -75,7 +75,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a35d343c8bdbcb87d3b82ed68e48a46c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-bcb4737e8fbcf1e9dfc00b59f8305558.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -314,6 +314,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>0.3</td>
 <td>Mean-field signal propagation factor</td>
 </tr>
+<tr class="odd">
+<td><code>epsilon</code></td>
+<td>0.1</td>
+<td>ε-Greedy exploration rate</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -341,7 +346,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install necessary libraries for the experiment in the Colab environment</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>pip install <span class="op">-</span>q ccxt pandas thrml<span class="op">&gt;=</span><span class="fl">0.1.3</span> matplotlib</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>pip install <span class="op">-</span>q ccxt pandas thrml<span class="op">&gt;=</span><span class="fl">0.1.3</span> matplotlib seaborn</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div id="8eb47f67" class="cell" data-execution_count="2">
@@ -601,8 +606,8 @@ Ready to go!</code></pre>
 <pre><code>=================================================================
 ROLLING WINDOW EXPERIMENT - LATEST 10,000 STEPS
 =================================================================
-Window Start: 2026-02-02 13:12:24 UTC
-Window End:   2026-02-02 15:59:04 UTC
+Window Start: 2026-02-27 11:16:42 UTC
+Window End:   2026-02-27 14:03:22 UTC
 Duration:     10,000 seconds (10,000 steps)
 Data Age:     ~5 minutes old (buffer for propagation)
 =================================================================
@@ -763,7 +768,7 @@ between runs due to different market conditions.</code></pre>
 <span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pd.DataFrame(columns<span class="op">=</span>[<span class="st">'timestamp'</span>, <span class="st">'price'</span>, <span class="st">'id'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="790838a1" class="cell">
+<div id="790838a1" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_market_data(dfs: Dict[<span class="bu">str</span>, pd.DataFrame], start_ms: <span class="bu">int</span>, end_ms: <span class="bu">int</span>):</span>
@@ -899,7 +904,7 @@ between runs due to different market conditions.</code></pre>
 </section>
 <section id="experiment-execution" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="experiment-execution"><span class="header-section-number">2.4</span> 5. Experiment Execution</h2>
-<div id="3d96a49e" class="cell">
+<div id="3d96a49e" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ceg_update(state, cidx, venue, outcome, discount_factor):</span>
@@ -972,9 +977,9 @@ between runs due to different market conditions.</code></pre>
 <span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (rng, n_ceg, n_cts, n_thrml), regret</span>
 <span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a>    init_carry <span class="op">=</span> (seed, ceg_init(n), cts_init(n), thrml_init(n, window_size<span class="op">=</span>config.window_size))</span>
-<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a>    _, regrets <span class="op">=</span> lax.scan(step, init_carry, jnp.arange(act_steps))</span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a>    final_carry, regrets <span class="op">=</span> lax.scan(step, init_carry, jnp.arange(act_steps))</span>
 <span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a>    cum_regrets <span class="op">=</span> jnp.cumsum(regrets, axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">"Contextual ε-Greedy"</span>: cum_regrets[:, <span class="dv">0</span>], <span class="st">"Contextual Thompson Sampling"</span>: cum_regrets[:, <span class="dv">1</span>], <span class="st">"THRML"</span>: cum_regrets[:, <span class="dv">2</span>]}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">"Contextual ε-Greedy"</span>: cum_regrets[:, <span class="dv">0</span>], <span class="st">"Contextual Thompson Sampling"</span>: cum_regrets[:, <span class="dv">1</span>], <span class="st">"THRML"</span>: cum_regrets[:, <span class="dv">2</span>], <span class="st">"thrml_biases"</span>: final_carry[<span class="dv">3</span>].biases, <span class="st">"thrml_weights"</span>: final_carry[<span class="dv">3</span>].weights}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div id="a289d69f" class="cell" data-execution_count="14">
@@ -1032,50 +1037,57 @@ between runs due to different market conditions.</code></pre>
 <span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>        batch_res <span class="op">=</span> {}</span>
 <span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> lbl <span class="kw">in</span> labels:</span>
 <span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>            batch_res[lbl] <span class="op">=</span> jnp.concatenate([r[lbl] <span class="cf">for</span> r <span class="kw">in</span> all_res_list], axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"   [DONE] Total Context mode completed in </span><span class="sc">{</span>time<span class="sc">.</span>time()<span class="op">-</span>start_time<span class="sc">:.1f}</span><span class="ss">s"</span>)</span>
-<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>        summary[mode_name] <span class="op">=</span> jnp.array([jnp.mean(batch_res[lbl][:, <span class="op">-</span><span class="dv">1</span>]) <span class="cf">for</span> lbl <span class="kw">in</span> labels])</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>        batch_res[<span class="st">"thrml_biases"</span>] <span class="op">=</span> jnp.concatenate([r[<span class="st">"thrml_biases"</span>] <span class="cf">for</span> r <span class="kw">in</span> all_res_list], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>        batch_res[<span class="st">"thrml_weights"</span>] <span class="op">=</span> jnp.concatenate([r[<span class="st">"thrml_weights"</span>] <span class="cf">for</span> r <span class="kw">in</span> all_res_list], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"   [DONE] Total Context mode completed in </span><span class="sc">{</span>time<span class="sc">.</span>time()<span class="op">-</span>start_time<span class="sc">:.1f}</span><span class="ss">s"</span>)</span>
 <span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>        plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
-<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, lbl <span class="kw">in</span> <span class="bu">enumerate</span>(labels):</span>
-<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>            plt.plot(jnp.mean(batch_res[lbl], axis<span class="op">=</span><span class="dv">0</span>), label<span class="op">=</span>lbl)</span>
-<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a>        plt.title(<span class="ss">f"Cumulative Regret: </span><span class="sc">{</span>mode_name<span class="sc">}</span><span class="ss"> Context"</span>)<span class="op">;</span> plt.legend()<span class="op">;</span> plt.grid(<span class="va">True</span>)<span class="op">;</span> plt.show()</span>
-<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">""</span> <span class="op">+</span> <span class="st">"="</span><span class="op">*</span><span class="dv">45</span>)</span>
-<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span> <span class="st">'MODE'</span><span class="sc">:&lt;10}</span><span class="ss"> | </span><span class="sc">{</span> <span class="st">'Contextual ε-Greedy'</span><span class="sc">:&lt;10}</span><span class="ss"> | </span><span class="sc">{</span><span class="st">'Contextual Thompson Sampling'</span><span class="sc">:&lt;10}</span><span class="ss"> | </span><span class="sc">{</span><span class="st">'THRML'</span><span class="sc">:&lt;10}</span><span class="ss">"</span>)</span>
-<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> m, v <span class="kw">in</span> summary.items():</span>
-<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>m<span class="sc">:&lt;10}</span><span class="ss"> | </span><span class="sc">{</span><span class="bu">float</span>(v[<span class="dv">0</span>])<span class="sc">:&lt;10.2f}</span><span class="ss"> | </span><span class="sc">{</span><span class="bu">float</span>(v[<span class="dv">1</span>])<span class="sc">:&lt;10.2f}</span><span class="ss"> | </span><span class="sc">{</span><span class="bu">float</span>(v[<span class="dv">2</span>])<span class="sc">:&lt;10.2f}</span><span class="ss">"</span>)</span>
-<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">45</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>        summary[mode_name] <span class="op">=</span> jnp.array([jnp.mean(batch_res[lbl][:, <span class="op">-</span><span class="dv">1</span>]) <span class="cf">for</span> lbl <span class="kw">in</span> labels])</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>        plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, lbl <span class="kw">in</span> <span class="bu">enumerate</span>(labels):</span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a>            plt.plot(jnp.mean(batch_res[lbl], axis<span class="op">=</span><span class="dv">0</span>), label<span class="op">=</span>lbl)</span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a>        plt.title(<span class="ss">f"Cumulative Regret: </span><span class="sc">{</span>mode_name<span class="sc">}</span><span class="ss"> Context"</span>)<span class="op">;</span> plt.legend()<span class="op">;</span> plt.grid(<span class="va">True</span>)<span class="op">;</span> plt.show()</span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> mode_name <span class="op">==</span> <span class="st">"random"</span>:</span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a>            global_final_biases <span class="op">=</span> jnp.mean(batch_res[<span class="st">"thrml_biases"</span>], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>            global_final_weights <span class="op">=</span> jnp.mean(batch_res[<span class="st">"thrml_weights"</span>], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">""</span> <span class="op">+</span> <span class="st">"="</span><span class="op">*</span><span class="dv">45</span>)</span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span> <span class="st">'MODE'</span><span class="sc">:&lt;10}</span><span class="ss"> | </span><span class="sc">{</span> <span class="st">'Contextual ε-Greedy'</span><span class="sc">:&lt;10}</span><span class="ss"> | </span><span class="sc">{</span><span class="st">'Contextual Thompson Sampling'</span><span class="sc">:&lt;10}</span><span class="ss"> | </span><span class="sc">{</span><span class="st">'THRML'</span><span class="sc">:&lt;10}</span><span class="ss">"</span>)</span>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> m, v <span class="kw">in</span> summary.items():</span>
+<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>m<span class="sc">:&lt;10}</span><span class="ss"> | </span><span class="sc">{</span><span class="bu">float</span>(v[<span class="dv">0</span>])<span class="sc">:&lt;10.2f}</span><span class="ss"> | </span><span class="sc">{</span><span class="bu">float</span>(v[<span class="dv">1</span>])<span class="sc">:&lt;10.2f}</span><span class="ss"> | </span><span class="sc">{</span><span class="bu">float</span>(v[<span class="dv">2</span>])<span class="sc">:&lt;10.2f}</span><span class="ss">"</span>)</span>
+<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">45</span>)</span>
+<span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data, global_final_biases, global_final_weights, infra, config</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div id="158c036b" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the experiment</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>execute_experiment()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>data, final_biases, final_weights, infra, config <span class="op">=</span> execute_experiment()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[START] Fetching Historical Data...
-   Time window: 1770037944132 to 1770047944132
-   [DEBUG] coinbase: Batch 1 covers 1770048246524 to 1770048217876
-   + coinbaseexchange: Fetched 209656 trades (220 API calls).
-   + kraken    : Fetched 14892 trades (15 API calls).
-   + bitstamp  : Fetched 40766 trades (41 API calls).
-[DATA] Processing 10000 time buckets (1770037944132 to 1770047944132)
-   [COVERAGE] coinbaseexchange:  9998.7s of 10000s (100.0%)
-   [COVERAGE] kraken    :  9993.6s of 10000s ( 99.9%)
-   [COVERAGE] bitstamp  :  9996.0s of 10000s (100.0%)
-   coinbaseexchange: 209656 trades mapped to buckets
-   kraken: 14892 trades mapped to buckets
-   bitstamp: 40766 trades mapped to buckets
+   Time window: 1772191002579 to 1772201002579
+   [DEBUG] coinbase: Batch 1 covers 1772201302927 to 1772201167286
+   + coinbaseexchange: Fetched 112326 trades (116 API calls).
+   + kraken    : Fetched 10831 trades (11 API calls).
+   + bitstamp  : Fetched 11030 trades (12 API calls).
+[DATA] Processing 10000 time buckets (1772191002579 to 1772201002579)
+   [COVERAGE] coinbaseexchange:  9999.7s of 10000s (100.0%)
+   [COVERAGE] kraken    :  9997.8s of 10000s (100.0%)
+   [COVERAGE] bitstamp  :  9995.0s of 10000s (100.0%)
+   coinbaseexchange: 112326 trades mapped to buckets
+   kraken: 10831 trades mapped to buckets
+   bitstamp: 11030 trades mapped to buckets
 [DATA] Dataset Final Size: 10000 bucketted seconds.
 [RUN] Running FIXED Context (Batched execution to prevent OOM)... 
-   - Processing seeds 0 to 50... [138.7s]
-   - Processing seeds 50 to 100... [121.7s]
-   - Processing seeds 100 to 150... [121.5s]
-   - Processing seeds 150 to 200... [121.6s]
-   [DONE] Total Context mode completed in 503.6s</code></pre>
+   - Processing seeds 0 to 50... [138.8s]
+   - Processing seeds 50 to 100... [120.8s]
+   - Processing seeds 100 to 150... [120.8s]
+   - Processing seeds 150 to 200... [120.4s]
+   [DONE] Total Context mode completed in 501.0s</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1086,11 +1098,11 @@ between runs due to different market conditions.</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[RUN] Running RANDOM Context (Batched execution to prevent OOM)... 
-   - Processing seeds 0 to 50... [242.8s]
-   - Processing seeds 50 to 100... [216.4s]
-   - Processing seeds 100 to 150... [216.5s]
-   - Processing seeds 150 to 200... [216.4s]
-   [DONE] Total Context mode completed in 892.1s</code></pre>
+   - Processing seeds 0 to 50... [242.6s]
+   - Processing seeds 50 to 100... [217.7s]
+   - Processing seeds 100 to 150... [217.8s]
+   - Processing seeds 150 to 200... [217.7s]
+   [DONE] Total Context mode completed in 895.7s</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1102,9 +1114,117 @@ between runs due to different market conditions.</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>=============================================
 MODE       | Contextual ε-Greedy | Contextual Thompson Sampling | THRML     
-fixed      | 4823.86    | 4532.97    | 3914.27   
-random     | 5141.93    | 5000.64    | 3775.45   
+fixed      | 5212.60    | 4970.83    | 4023.46   
+random     | 5014.34    | 5163.01    | 3279.17   
 =============================================</code></pre>
+</div>
+</div>
+</section>
+<section id="proof-of-generative-ai-via-thermodynamic-ensembles" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="proof-of-generative-ai-via-thermodynamic-ensembles"><span class="header-section-number">2.5</span> 6. Proof of Generative AI via Thermodynamic Ensembles</h2>
+<p>Here we freeze the learned weights and biases of our THRML agent and demonstrate its ability to function as a <strong>Generative AI</strong> for financial data. By running an unclamped Gibbs sampling procedure, the Ising EBM synthesizes realistic market states that maintain the correlation structure of the real trade data.</p>
+<div id="0e559b0c" class="cell" data-execution_count="16">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_synthetic_data(biases, weights, n_samples, infra, config):</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Generating </span><span class="sc">{</span>n_samples<span class="sc">}</span><span class="ss"> synthetic market states using unclamped Gibbs sampling..."</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> IsingEBM(infra[<span class="st">'nodes'</span>], infra[<span class="st">'edges'</span>], biases, weights, jnp.array(config.beta))</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    prog <span class="op">=</span> IsingSamplingProgram(model, infra[<span class="st">'joint'</span>][<span class="st">'free'</span>], clamped_blocks<span class="op">=</span>[])</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Use trained steps_per_sample to ensure adequate mixing and decorrelation</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    sched <span class="op">=</span> SamplingSchedule(n_warmup<span class="op">=</span><span class="dv">100</span>, n_samples<span class="op">=</span>n_samples, steps_per_sample<span class="op">=</span>config.steps_per_sample)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    k1, k2 <span class="op">=</span> random.split(random.key(<span class="dv">42</span>))</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    init <span class="op">=</span> hinton_init(k1, model, infra[<span class="st">'joint'</span>][<span class="st">'free'</span>], ())</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    samples <span class="op">=</span> sample_states(k2, prog, sched, init, [], infra[<span class="st">'full_block'</span>])[<span class="dv">0</span>]</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    spins <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> samples.astype(jnp.float32) <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> spins.reshape(n_samples, <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>synthetic_data <span class="op">=</span> generate_synthetic_data(final_biases, final_weights, <span class="dv">5000</span>, infra, config)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generating 5000 synthetic market states using unclamped Gibbs sampling...</code></pre>
+</div>
+</div>
+<div id="45a59acb" class="cell" data-execution_count="18">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the 'state' observations from the real data for comparison</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>real_states <span class="op">=</span> data[:, config.n_venues:] </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Marginal Probabilities (P(Success))</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>real_marginals <span class="op">=</span> (np.mean(real_states, axis<span class="op">=</span><span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span>) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>synthetic_marginals <span class="op">=</span> (np.mean(synthetic_data, axis<span class="op">=</span><span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span>) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>marg_mae <span class="op">=</span> np.mean(np.<span class="bu">abs</span>(real_marginals <span class="op">-</span> synthetic_marginals))</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>marg_mse <span class="op">=</span> np.mean((real_marginals <span class="op">-</span> synthetic_marginals)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Pairwise Correlations</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>real_cov <span class="op">=</span> np.corrcoef(real_states, rowvar<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>synthetic_cov <span class="op">=</span> np.corrcoef(synthetic_data, rowvar<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>corr_mae <span class="op">=</span> np.mean(np.<span class="bu">abs</span>(real_cov <span class="op">-</span> synthetic_cov))</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>corr_mse <span class="op">=</span> np.mean((real_cov <span class="op">-</span> synthetic_cov)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Visualization</span></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">18</span>, <span class="dv">5</span>))</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Heatmap Real</span></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>sns.heatmap(real_cov, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">"coolwarm"</span>, center<span class="op">=</span><span class="dv">0</span>, ax<span class="op">=</span>axes[<span class="dv">0</span>], </span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>            xticklabels<span class="op">=</span>EXCHANGES, yticklabels<span class="op">=</span>EXCHANGES, vmin<span class="op">=-</span><span class="fl">1.0</span>, vmax<span class="op">=</span><span class="fl">1.0</span>)</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">"Real Data Correlation (CCXT)"</span>)</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Heatmap Synthetic</span></span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>sns.heatmap(synthetic_cov, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">"coolwarm"</span>, center<span class="op">=</span><span class="dv">0</span>, ax<span class="op">=</span>axes[<span class="dv">1</span>], </span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>            xticklabels<span class="op">=</span>EXCHANGES, yticklabels<span class="op">=</span>EXCHANGES, vmin<span class="op">=-</span><span class="fl">1.0</span>, vmax<span class="op">=</span><span class="fl">1.0</span>)</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">"Synthetic Data Correlation (THRML)"</span>)</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Marginal Bar Plot</span></span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="bu">len</span>(EXCHANGES))</span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> <span class="fl">0.35</span></span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].bar(x <span class="op">-</span> width<span class="op">/</span><span class="dv">2</span>, real_marginals, width, label<span class="op">=</span><span class="st">'Real'</span>, color<span class="op">=</span><span class="st">'#1f77b4'</span>, alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].bar(x <span class="op">+</span> width<span class="op">/</span><span class="dv">2</span>, synthetic_marginals, width, label<span class="op">=</span><span class="st">'Synthetic'</span>, color<span class="op">=</span><span class="st">'#ff7f0e'</span>, alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_xticks(x)</span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_xticklabels(EXCHANGES)</span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_ylabel(<span class="st">'P(Favorable)'</span>)</span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_title(<span class="st">'Marginal Probability Comparison'</span>)</span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].legend()</span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>plt.suptitle(<span class="st">"Proof of Generative Inference: Thermodynamic Synthesis of Financial Markets"</span>, fontsize<span class="op">=</span><span class="dv">16</span>)</span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">'generative_inference_heatmap.png'</span>)</span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">65</span>)</span>
+<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"GENERATIVE VALIDATION METRICS"</span>)</span>
+<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">65</span>)</span>
+<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Marginal Probabilities MAE: </span><span class="sc">{</span>marg_mae<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Marginal Probabilities MSE: </span><span class="sc">{</span>marg_mse<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">65</span>)</span>
+<span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Correlation Matrix MAE:     </span><span class="sc">{</span>corr_mae<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Correlation Matrix MSE:     </span><span class="sc">{</span>corr_mse<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb23-56"><a href="#cb23-56" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">65</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="real_data_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>=================================================================
+GENERATIVE VALIDATION METRICS
+=================================================================
+Marginal Probabilities MAE: 0.0885
+Marginal Probabilities MSE: 0.0143
+-----------------------------------------------------------------
+Correlation Matrix MAE:     0.0932
+Correlation Matrix MSE:     0.0151
+=================================================================</code></pre>
 </div>
 </div>
 
