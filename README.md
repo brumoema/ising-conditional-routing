@@ -159,6 +159,8 @@ jupyter notebook experiments/synthetic_data.ipynb
 4. Ising, E. (1925). "Beitrag zur Theorie des Ferromagnetismus." *Zeitschrift für Physik*, 31(1), 253-258.
 5. Sutton, R. S., & Barto, A. G. (2018). *Reinforcement Learning: An Introduction*. MIT Press.
 6. Agrawal, S., & Goyal, N. (2013). "Thompson Sampling for Contextual Bandits with Linear Payoffs." *ICML*.
+7. **CCXT Library**: "CCXT – CryptoCurrency eXchange Trading Library." [https://github.com/ccxt/ccxt](https://github.com/ccxt/ccxt)
+8. Hinton, G. E. (2002). "Training products of experts by minimizing contrastive divergence." *Neural Computation*, 14(8), 1771-1800.
 
 ---
 
