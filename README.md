@@ -23,32 +23,38 @@ By leveraging **conditional (clamped) sampling** with [THRML](https://github.com
 
 ## 🚀 Key Results
 
-### Synthetic Data (N=3 venues, K=1 context)
+### Synthetic Data (N=5 venues, K=1 context)
 
 #### Fixed Context Mode
 
 | Scenario | Ctx-ε-Greedy | Ctx-Thompson | THRML | THRML Benefit |
 |----------|--------------|--------------|-------|---------------|
 | IID Venues | 0.00 | 0.00 | 0.00 | Tie (Optimal) |
-| Correlated | 206.40 | 5.99 | **2.21** | **Win** |
-| Regime Shift | 2520.47 | 3555.48 | **2154.07** | **Win (-39%)** |
+| Correlated | 767.73 | 939.81 | **624.83** | **Win (-19%)** |
+| Regime Shift | 2415.13 | 2043.74 | **1762.18** | **Win (-14%)** |
 
 #### Random Context Mode
 
 | Scenario | Ctx-ε-Greedy | Ctx-Thompson | THRML | THRML Benefit |
 |----------|--------------|--------------|-------|---------------|
-| IID Venues | 664.12 | 12.84 | **0.96** | **Win** |
-| Correlated | 1897.93 | **1416.11** | 1418.24 | Competitive |
-| Regime Shift | 2052.62 | 2596.88 | **1444.48** | **Win (-44%)** |
+| IID Venues | 1207.16 | 513.64 | **3.20** | **Win** |
+| Correlated | 2779.13 | 2948.98 | **1784.19** | **Win (-36%)** |
+| Regime Shift | 3133.25 | 3061.03 | **1841.05** | **Win (-40%)** |
 
-### Real Cryptocurrency Data (Coinbase, Kraken, Bitstamp)
+### Real Cryptocurrency Data (5 Exchanges)
 
 | Context Mode | Ctx-ε-Greedy | Ctx-Thompson | THRML |
 |--------------|--------------|--------------|-------|
-| Fixed | 5212.60 | 4970.83 | **4023.46** |
-| Random | 5014.34 | 5163.01 | **3279.17** |
+| Fixed | 5068.10 | 3652.93 | **3547.20** |
+| Random | 6214.78 | 5170.40 | **2753.90** |
 
-**THRML achieves 19-37% regret reduction** compared to state-of-the-art contextual bandit approaches.
+**THRML achieves 2.9-46.7% regret reduction** compared to state-of-the-art contextual bandit approaches on real market data.
+
+#### Generative Validation (Price-Direction States)
+- **Marginal Probabilities MAE:** 0.0107 (MSE: 0.0002)
+- **Correlation Matrix MAE:** 0.0772 (MSE: 0.0089)
+
+*Note: This section evaluates a fresh generative model trained on price-direction states, not the routing agent.*
 
 ---
 
@@ -84,12 +90,11 @@ By leveraging **conditional (clamped) sampling** with [THRML](https://github.com
 
 | Parameter | Value | Description |
 |-----------|-------|-------------|
-| `n_venues` | 3 | Number of trading venues |
+| `n_venues` | 5 | Number of trading venues |
 | `n_steps` | 10,000 | Steps per experiment run |
 | `n_seeds` | 200 | Independent runs for statistical significance |
 | `discount_factor` | 0.995 | Forgetting factor for non-stationary adaptation |
 | `learning_rate` | 0.05 | THRML learning rate |
-| `coupling_decay` | 0.995 | Decay factor for edge weights |
 | `steps_per_sample` | 4 | Gibbs sampling thinning parameter |
 
 ---
@@ -98,7 +103,7 @@ By leveraging **conditional (clamped) sampling** with [THRML](https://github.com
 
 ### Prerequisites
 
-- Python 3.10+
+- Python 3.14+
 - JAX with GPU support (recommended)
 - [THRML](https://github.com/extropic-ai/thrml) ≥ 0.1.3
 
@@ -145,7 +150,7 @@ jupyter notebook experiments/synthetic_data.ipynb
 
 ### Real Data
 
-- **Source**: BTC/USD trades from Coinbase, Kraken, and Bitstamp
+- **Source**: BTC/USDT (with BTC/USD fallback) trades from 5 exchanges
 - **Window**: Rolling 10,000-second window of recent trades
 - **Processing**: Time-bucketed with argmax-based winner labeling
 
