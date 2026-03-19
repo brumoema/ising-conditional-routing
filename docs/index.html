@@ -649,9 +649,9 @@ window.Quarto = {
 <p>Evaluation is performed on trade data from <strong>5 exchanges</strong> (N=5, K=1): <strong>Binance US (<code>binanceus</code>), Coinbase (<code>coinbaseexchange</code>), Kraken (<code>kraken</code>), Bitfinex (<code>bitfinex</code>), and Bitstamp (<code>bitstamp</code>)</strong>. The evaluation process utilizes causal forward-filling (<code>ffill()</code>) for missing time buckets within the window, and uses a strict 0.0 sentinel price (via <code>fillna(0.0)</code>) for leading buckets before a venue’s first observed trade to avoid look-ahead bias.</p>
 <p><strong>Experimental Setup:</strong></p>
 <ul>
-<li><strong>Data Acquisition</strong>: A rolling window mechanism fetches the most recent 10,000 seconds of trade data to ensure relevance to current market conditions<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>.</li>
+<li><strong>Data Acquisition</strong>: A rolling window mechanism fetches the most recent 10,000 seconds of trade data to ensure relevance to current market conditions<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a><a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>.</li>
 <li><strong>10,000 time steps</strong> of aligned market data captured from this window (run: 2026-03-18 12:42:30–15:29:10 UTC).</li>
-<li><strong>200 independent runs</strong> performed on a rolling-window data capture (note that results vary over time)<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>.</li>
+<li><strong>200 independent runs</strong> performed on a rolling-window data capture (note that results vary over time)<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>.</li>
 <li>Adaptation rate <span class="math inline">\(\eta = 0.05\)</span> (<code>learning_rate</code>) and discount factor 0.995.</li>
 <li>THRML precision: <code>n_warmup=50</code>, <code>n_samples=100</code>, <code>steps_per_sample=4</code>.</li>
 <li>ε-Greedy exploration rate: <span class="math inline">\(\varepsilon = 0.1\)</span>.</li>
@@ -767,7 +767,8 @@ window.Quarto = {
 <li id="fn6"><p>This is a custom online update rule inspired by CD, not the reference <code>estimate_kl_grad</code> training pipeline from THRML.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn7"><p>Verification results for the Generative Proof are reported across 64 independent seeds, while routing benchmark results in Tables 1–3 use 200 seeds. Due to the stochastic nature of Gibbs sampling, exact values may vary between experimental runs.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn8"><p>The provided research notebook utilizes a live rolling window. Therefore, results from individual notebook executions will vary depending on the execution time and will show deviations from the statistics reported in this article.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn9"><p>Processed in batches of 50 seeds to manage GPU memory constraints.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>This work accesses publicly available trade data via exchange REST APIs through CCXT for independent non-commercial research. No raw exchange market data is stored persistently or redistributed; only aggregate experimental results are reported. Users should review each exchange’s terms of service before replication.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>Processed in batches of 50 seeds to manage GPU memory constraints.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

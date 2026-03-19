@@ -274,7 +274,7 @@ Evaluation is performed on trade data from **5 exchanges** (N=5, K=1): **Binance
 
 **Experimental Setup:**
 
--   **Data Acquisition**: A rolling window mechanism fetches the most recent 10,000 seconds of trade data to ensure relevance to current market conditions[^5].
+-   **Data Acquisition**: A rolling window mechanism fetches the most recent 10,000 seconds of trade data to ensure relevance to current market conditions[^5][^public-api-note].
 -   **10,000 time steps** of aligned market data captured from this window (run: 2026-03-18 12:42:30–15:29:10 UTC).
 -   **200 independent runs** performed on a rolling-window data capture (note that results vary over time)[^6].
 -   Adaptation rate $\eta = 0.05$ (`learning_rate`) and discount factor 0.995.
@@ -351,6 +351,8 @@ The results are conclusive:
  [^5]: The provided research notebook utilizes a live rolling window. Therefore, results from individual notebook executions will vary depending on the execution time and will show deviations from the statistics reported in this article.
  
  [^6]: Processed in batches of 50 seeds to manage GPU memory constraints.
+
+[^public-api-note]: This work accesses publicly available trade data via exchange REST APIs through CCXT for independent non-commercial research. No raw exchange market data is stored persistently or redistributed; only aggregate experimental results are reported. Users should review each exchange’s terms of service before replication.
 
 ## References
 
