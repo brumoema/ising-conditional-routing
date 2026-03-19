@@ -45,14 +45,16 @@ By leveraging **conditional (clamped) sampling** with [THRML](https://github.com
 
 | Context Mode | Ctx-ε-Greedy | Ctx-Thompson | THRML |
 |--------------|--------------|--------------|-------|
-| Fixed | 5068.10 | 3652.93 | **3547.20** |
-| Random | 6214.78 | 5170.40 | **2753.90** |
+| Fixed | 8610.59 | 7002.17 | **6738.68** |
+| Random | 8848.45 | 8134.47 | **4901.35** |
 
-**THRML achieves 2.9-46.7% regret reduction** compared to state-of-the-art contextual bandit approaches on real market data.
+**THRML achieves 3.8-39.7% regret reduction** compared to contextual bandit baselines on the real-market runs reported in the article.
+
+*Note: the real-data experiment uses a live rolling window, so rerunning the notebook later can produce different values from the article snapshot summarized here.*
 
 #### Generative Validation (Price-Direction States)
-- **Marginal Probabilities MAE:** 0.0107 (MSE: 0.0002)
-- **Correlation Matrix MAE:** 0.0772 (MSE: 0.0089)
+- **Marginal Probabilities MAE:** 0.0108 (MSE: 0.0002)
+- **Correlation Matrix MAE:** 0.0283 (MSE: 0.0016)
 
 *Note: This section evaluates a fresh generative model trained on price-direction states, not the routing agent.*
 
